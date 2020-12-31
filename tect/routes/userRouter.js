@@ -1,9 +1,9 @@
 var express = require('express');
 const router = require('express').Router();
-const Answer = require('../models/answer');
+const User = require('../models/user');
 
 router.get('/', (req, res)=>{
-  Answer.find((err, lists)=>{
+  Userr.find((err, lists)=>{
     if (err) {
       return res.status(500).send('Cannot Get Answer')
     } else {
@@ -13,13 +13,14 @@ router.get('/', (req, res)=>{
 })
 
 router.post('/', (req, res)=> {
-  const post= new Answer();
-  post.answerID=req.body.answerID
-  post.answerBody.authorNickname=req.body.authorNickname;
-  post.answerBody.authorUID=req.body.authorUID;
-  post.answerBody.content=req.body.content;
-  post.answerBody.createdAt=req.body.createdAt;
-  post.answerBody.lastUpdate=req.body.lastUpdate;
+  const post= new User();
+  post.userID=req.body.userID
+
+  post.userBody.createdAt=req.body.createdAt;
+  post.userBody.email=req.body.email;
+  post.userBody.nickname=req.body.nickname;
+  post.userBody.point=req.body.point;
+  post.userBody.posts=req.body.posts
   
   //DB에 저장
   post.save((err)=>{

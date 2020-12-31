@@ -14,6 +14,7 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res)=> {
   const post= new Subject();
+  post.subjectName = req.body.subjectName;
   post.authorNickname=req.body.authorNickname;
   post.authorUID=req.body.authorUID;
   post.content=req.body.content;

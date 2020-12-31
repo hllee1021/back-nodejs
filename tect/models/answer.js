@@ -3,11 +3,14 @@ const Schema = mongoose.Schema;
 
 // Define Schemes
 const answerSchema = new Schema({
-  authorNickname: { type: String},
-  authorUID: { type: String},
-  content: { type: String},
-  createdAt: { type: String},
-  lastUpdate:{type:String}
+  answerID: {type:String},
+  answerBody: {
+    authorNickname: String,
+    authorUID: String,
+    content: String,
+    createdAt: String,
+    lastUpdate: String
+  }
 });
 
 
