@@ -1,6 +1,7 @@
 var express = require('express');
 const router = require('express').Router();
 const Answer = require('../models/answer');
+const mongoose = require('mongoose');
 
 router.get('/', (req, res)=>{
   Answer.find((err, lists)=>{
@@ -14,7 +15,8 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res)=> {
   const post= new Answer();
-  post.answerID=req.body.answerID
+  post._id = new mongoose.Types.ObjectId();
+  post.answerID=req.body.answerID;
   post.answerBody.authorNickname=req.body.authorNickname;
   post.answerBody.authorUID=req.body.authorUID;
   post.answerBody.content=req.body.content;

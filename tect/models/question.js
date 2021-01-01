@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 // Define Schemes
 const questionSchema = new Schema({
     questionID: {type:String},
@@ -11,7 +12,10 @@ const questionSchema = new Schema({
         lastUpdate: String,
         authorNickname: String,
         authorUID: String,
-        answers:[String],
+        answers:[{
+            type:mongoose.SchemaTypes.ObjectId,
+            ref: "Answer"
+        }], 
         comments:[String],
         hashtags:[String],
     }
