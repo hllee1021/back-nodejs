@@ -3,13 +3,12 @@ const Schema = mongoose.Schema;
 
 // Define Schemes
 const userSchema = new Schema({
-  userID: {type:String},
+  postUID: [{type:mongoose.SchemaTypes.ObjectId}],
   userBody: {
-    createdAt: String,
-    email: String,
-    nickname: String,
-    point:Number,
-    posts:[String]
+    createdAt: {type:Date, default:Date.now},
+    email: {type:String, required:true},
+    nickname: {type: String, required:true},
+    point:{type:Number, required:true}
   }
 });
 
