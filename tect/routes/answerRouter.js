@@ -14,17 +14,15 @@ router.get('/', (req, res)=>{
 })
 
 router.post('/', (req, res)=> {
-  const post= new Answer();
-  post._id = new mongoose.Types.ObjectId();
-  post.answerID=req.body.answerID;
-  post.answerBody.authorNickname=req.body.authorNickname;
-  post.answerBody.authorUID=req.body.authorUID;
-  post.answerBody.content=req.body.content;
-  post.answerBody.createdAt=req.body.createdAt;
-  post.answerBody.lastUpdate=req.body.lastUpdate;
-  
-  //DB에 저장
-  post.save((err)=>{
+  const answer= new Answer();
+  const POST_ID =req.body.postID
+  const ANSWER_ID = req.body.answerID
+  answer._id=mongoose.Types.ObjectId(ANSWER_ID);
+  answer.answerBody.authorNickname=req.body.authorNickname;
+  answer.answerBody.authorID=req.body.authorID;
+  answer.answerBody.content=req.body.content;
+  //answer에 저장
+  answer.save((err)=>{
     if (err) {
       console.log(err, "data save error");
       res.json({result: 0});
