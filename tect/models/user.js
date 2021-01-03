@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 // Define Schemes
 const userSchema = new Schema({
   postUID: [{type:mongoose.SchemaTypes.ObjectId}],
+  isDeleted:{type:Boolean , default:false},
   userBody: {
     createdAt: {type:Date, default:Date.now},
     email: {type:String, required:true},

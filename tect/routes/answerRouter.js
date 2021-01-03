@@ -17,9 +17,9 @@ router.get('/', (req, res)=>{
 
 //answertID 이용해서 읽어오기
 router.get('/:answerID', (req, res) => {
-  Answer.findOne({ _id: req.params.answerID }, (err, post) => {
+  Answer.findOne({ _id: req.params.answerID }).populate('postID').exec((err, lists)=>{
     if (err) return res.status(500).send("Cannot Get Answer by ID")
-    res.json(post);
+    res.json(lists);
   })
 })
 

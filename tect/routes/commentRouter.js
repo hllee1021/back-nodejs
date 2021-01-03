@@ -14,15 +14,13 @@ router.get('/', (req, res) => {
   })
 })
 
-
 //commentID 이용해서 읽어오기
 router.get('/:commentID', (req, res) => {
-  Comment.findOne({ _id: req.params.commentID }, (err, post) => {
+  Comment.findOne({ _id: req.params.commentID }).populate('postID').populate('parentID').exec((err, lists)=>{
     if (err) return res.status(500).send("Cannot Get Comment by ID")
-    res.json(post);
-  })
+    res.json(lists);
+  });
 })
-
 //COMMENT 작성
 router.post('/', (req, res) => {
   const comment = new Comment();
@@ -79,5 +77,3 @@ router.delete('/:commentID', (req, res) => {
 })
 
 module.exports = router;
-
-//checkId ()=>{}
