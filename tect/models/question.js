@@ -11,16 +11,7 @@ const questionSchema = new Schema({
         lastUpdate: {type: Date, default:Date.now},
         authorNickname: {type: String, required:true},
         authorID: {type: String, required:true},
-        hashtags:[String],
-        // answers:[{
-        //     type:mongoose.SchemaTypes.ObjectId,
-        //     ref: "Answer"
-        // }], 
-        // comments:[{
-        //     type:mongoose.SchemaTypes.ObjectId,
-        //     ref: "Comment"
-        // }],
-       
+        hashtags:[String]
     }
 });
 

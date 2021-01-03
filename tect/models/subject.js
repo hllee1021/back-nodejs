@@ -8,7 +8,7 @@ const subjectSchema = new Schema({
   authorNickname: { type: String},
   authorUID: { type: String},
   content: { type: String},
-  createdAt: { type: String}
+  createdAt: { type: Date, default:Date.now}
 });
 
 

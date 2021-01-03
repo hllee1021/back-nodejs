@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema({
     postID: {type:mongoose.SchemaTypes.ObjectId, ref:'Question' ,required:true},
     parentID:{type:mongoose.Schema.Types.ObjectId, ref:'Comment'},
+    isDeleted:{type:Boolean , default:false},
     commentBody: {
         content: String,
         createdAt: {type:Date, default:Date.now},
