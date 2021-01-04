@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
+const { json } = require('body-parser');
 
 //전체 읽어오기
 router.get('/', (req, res) => {
@@ -19,21 +20,27 @@ router.get('/', (req, res) => {
 
 
 // //postID 이용해서 읽어오기
-// router.get('/:questionID', (req, res) => {
-//   Question.findOne({ _id: req.params.questionID }, (err, post) => {
+// router.get('/:postID', (req, res) => {
+//   Question.findOne({ _id: req.params.postID }, (err, post) => {
 //     if (err) return res.status(500).send("Cannot Get Question by ID")
 //     res.json(post);
 //   })
 // })
 
-router.get('/:questionID', (req, res) => {
+router.get('/:postID', (req, res) => {
     Promise.all([
-      Question.findOne({_id:req.params.questionID}),
-      Answer.find({"answerBody.questionID": req.params.questionID}),
-      Comment.find({"commentBody.questionID":req.params.questionID})
+      Question.findOne({_id:req.params.postID}),
+      Answer.find({"answerBody.postID": req.params.postID}),
+      Comment.find({"commentBody.postID":req.params.postID})
     ]).
     then((post)=>{
-      res.json(post)
+      var question, answers, comments ={}
+      question =post[0]
+      answers = post[1]
+      comments = post[2]
+      
+      console.log(answers)
+      res.json({question, answers, comments})
     }).
     catch((err)=>{
       console.log(err)
@@ -47,10 +54,10 @@ router.get('/:questionID', (req, res) => {
 //Question 작성
 router.post('/', (req, res) => {
   const post = new Question();
-  const QUESTION_ID = req.body.questionID
+  const QUESTION_ID = req.body.postID
   
 
-  post.questionBody.questionID = QUESTION_ID;
+  post.questionBody.postID = QUESTION_ID;
   post._id = mongoose.Types.ObjectId(QUESTION_ID);
   post.questionBody.title = req.body.title;
   post.questionBody.content = req.body.content;
