@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // Define Schemes
 const commentSchema = new Schema({
     commentBody: {
-        questionID: {type:mongoose.SchemaTypes.ObjectId, ref:'Question' ,required:true},
+        postID: {type:mongoose.SchemaTypes.ObjectId, ref:'Question' ,required:true},
         commentID: {type:String},
         parentID:{type:mongoose.Schema.Types.ObjectId, ref:'Comment'},
         content: {type:String},
