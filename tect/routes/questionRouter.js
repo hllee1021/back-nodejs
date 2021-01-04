@@ -1,7 +1,10 @@
 var express = require('express');
 const router = require('express').Router();
-const Question = require('../models/question');
 const mongoose = require('mongoose');
+
+const Question = require('../models/question');
+const Answer = require('../models/answer');
+const Comment = require('../models/comment');
 
 //전체 읽어오기
 router.get('/', (req, res) => {
@@ -14,21 +17,42 @@ router.get('/', (req, res) => {
   })
 })
 
-//postID 이용해서 읽어오기
-router.get('/:postID', (req, res) => {
-  Question.findOne({ _id: req.params.postID }, (err, post) => {
-    if (err) return res.status(500).send("Cannot Get Question by ID")
-    res.json(post);
+
+// //postID 이용해서 읽어오기
+// router.get('/:questionID', (req, res) => {
+//   Question.findOne({ _id: req.params.questionID }, (err, post) => {
+//     if (err) return res.status(500).send("Cannot Get Question by ID")
+//     res.json(post);
+//   })
+// })
+
+router.get('/:questionID', (req, res) => {
+    Promise.all([
+      Question.findOne({_id:req.params.questionID}),
+      Answer.find({"answerBody.questionID": req.params.questionID}),
+      Comment.find({"commentBody.questionID":req.params.questionID})
+    ]).
+    then((post)=>{
+      res.json(post)
+    }).
+    catch((err)=>{
+      console.log(err)
+    })
   })
-})
+  
+
+
+
 
 //Question 작성
 router.post('/', (req, res) => {
   const post = new Question();
-  const POST_ID = req.body.postID
+  const QUESTION_ID = req.body.questionID
+  
 
-  post._id = mongoose.Types.ObjectId(POST_ID)
-  post.questionBody.title = req.body.title
+  post.questionBody.questionID = QUESTION_ID;
+  post._id = mongoose.Types.ObjectId(QUESTION_ID);
+  post.questionBody.title = req.body.title;
   post.questionBody.content = req.body.content;
   post.questionBody.authorNickname = req.body.authorNickname;
   post.questionBody.authorID = req.body.authorID;

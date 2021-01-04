@@ -17,7 +17,7 @@ router.get('/', (req, res)=>{
 
 //answertID 이용해서 읽어오기
 router.get('/:answerID', (req, res) => {
-  Answer.findOne({ _id: req.params.answerID }).populate('postID').exec((err, lists)=>{
+  Answer.findOne({ _id: req.params.answerID }).populate('questionID').exec((err, lists)=>{
     if (err) return res.status(500).send("Cannot Get Answer by ID")
     res.json(lists);
   })
@@ -28,11 +28,11 @@ router.get('/:answerID', (req, res) => {
 //ANSWER 작성
 router.post('/', (req, res)=> {
   const answer= new Answer();
-  const POST_ID =req.body.postID
+  const QUESTION_ID =req.body.questionID
   const ANSWER_ID = req.body.answerID
 
   answer._id=mongoose.Types.ObjectId(ANSWER_ID);
-  answer.postID = mongoose.Types.ObjectId(POST_ID);
+  answer.answerBody.questionID = mongoose.Types.ObjectId(QUESTION_ID);
   answer.answerBody.authorNickname=req.body.authorNickname;
   answer.answerBody.authorID=req.body.authorID;
   answer.answerBody.content=req.body.content;

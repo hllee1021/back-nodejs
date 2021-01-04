@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 //COMMENT 불러오기
 router.get('/', (req, res) => {
-  Comment.find().populate('postId').exec((err, lists) => {
+  Comment.find().populate('questionID').exec((err, lists) => {
     if (err) {
       return res.status(500).send("cannot get author")
     } else {
@@ -16,21 +16,23 @@ router.get('/', (req, res) => {
 
 //commentID 이용해서 읽어오기
 router.get('/:commentID', (req, res) => {
-  Comment.findOne({ _id: req.params.commentID }).populate('postID').populate('parentID').exec((err, lists)=>{
+  Comment.findOne({ _id: req.params.commentID }).populate('questionID').populate('parentID').exec((err, lists)=>{
     if (err) return res.status(500).send("Cannot Get Comment by ID")
     res.json(lists);
   });
 })
+
 //COMMENT 작성
 router.post('/', (req, res) => {
   const comment = new Comment();
-  const POST_ID = req.body.postID
+  const QUESTION_ID = req.body.questionID
   const PARENT_ID = req.body.parentID
   const COMMENT_ID = req.body.commentID
 
-  comment._id = mongoose.Types.ObjectId(COMMENT_ID)
-  comment.postID = mongoose.Types.ObjectId(POST_ID);
-  comment.parentID = mongoose.Types.ObjectId(PARENT_ID);
+  comment.commentBody.commentID = COMMENT_ID;
+  comment._id = mongoose.Types.ObjectId(COMMENT_ID);
+  comment.commentBody.questionID = mongoose.Types.ObjectId(QUESTION_ID);
+  comment.commentBody.parentID = mongoose.Types.ObjectId(PARENT_ID);
   comment.commentBody.authorNickname = req.body.authorNickname;
   comment.commentBody.authorID = req.body.authorID;
   comment.commentBody.content = req.body.content;
@@ -68,10 +70,10 @@ router.put('/:commentID', (req, res) => {
 router.delete('/:commentID', (req, res) => {
   Comment.findOne({ _id: req.params.commentID }, (err, comment) => {
     if (err) return res.json({ ERROR: "CANT FIND COMMENT" })
-    comment.isDeleted = true
-    comment.save((err) => {
+    comment.commentBody.isDeleted = true
+    comment.save((err, comment) => {
       if (err) return res.json({ ERROR: "COMMENT DELTED FAILURE" })
-      res.json({ RESULT: "COMMENT DELETED" });
+      res.json(comment);
     })
   })
 })
