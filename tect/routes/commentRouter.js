@@ -29,9 +29,9 @@ router.post('/', (req, res) => {
   const PARENT_ID = req.body.parentID
   const COMMENT_ID = req.body.commentID
 
-  comment.commentBody.commentID = COMMENT_ID;
-  comment._id = mongoose.Types.ObjectId(COMMENT_ID);
-  comment.commentBody.postID = mongoose.Types.ObjectId(POST_ID);
+  comment.commentBody.commentID = COMMENT_ID;          //front에서 사용하게 될 ID (String)
+  comment._id = mongoose.Types.ObjectId(COMMENT_ID);  ///back에서 사용하게 될 ID (mongoose ObjectID)
+  comment.commentBody.postID = mongoose.Types.ObjectId(POST_ID); 
   comment.commentBody.parentID = mongoose.Types.ObjectId(PARENT_ID);
   comment.commentBody.authorNickname = req.body.authorNickname;
   comment.commentBody.authorID = req.body.authorID;

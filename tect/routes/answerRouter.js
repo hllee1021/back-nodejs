@@ -31,7 +31,8 @@ router.post('/', (req, res)=> {
   const POST_ID =req.body.postID
   const ANSWER_ID = req.body.answerID
 
-  answer._id=mongoose.Types.ObjectId(ANSWER_ID);
+  answer.answerBody.answerID = ANSWER_ID              //front에서 사용하게 될 ID (String)
+  answer._id=mongoose.Types.ObjectId(ANSWER_ID);      //back에서 사용하게 될 ID (mongoose ObjectID)
   answer.answerBody.postID = mongoose.Types.ObjectId(POST_ID);
   answer.answerBody.authorNickname=req.body.authorNickname;
   answer.answerBody.authorID=req.body.authorID;
