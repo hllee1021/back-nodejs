@@ -6,6 +6,7 @@ const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
+const question = require('../models/question');
 
 //전체 읽어오기
 router.get('/', (req, res) => {
@@ -103,6 +104,21 @@ router.delete('/:postID', (req, res) => {
   Question.deleteOne({ _id: req.params.postID }, (err, result) => {
     if (err) return res.json({ ERROR: "DELETE FAILURE" })
     res.json({ RESULT: "DATA DELETED : ", result })
+  })
+})
+
+
+//검색
+//현재 question title과 content에서 불러옴, 중간에 있어도 검색가능
+router.post('/search', function(req, res){
+  const target=req.body.target;
+  const query=new RegExp(req.body.target);
+  Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},(err,lists)=>{
+    if (err) {
+      return res.status(500).send('Cannot Get Question')
+    } else {
+      res.json(lists);
+    }
   })
 })
 
