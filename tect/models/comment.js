@@ -3,15 +3,17 @@ const Schema = mongoose.Schema;
 
 // Define Schemes
 const commentSchema = new Schema({
-    postID: {type:mongoose.SchemaTypes.ObjectId, ref:'Question' ,required:true},
-    parentID:{type:mongoose.Schema.Types.ObjectId, ref:'Comment'},
-    isDeleted:{type:Boolean , default:false},
     commentBody: {
-        content: String,
+        questionID: {type:mongoose.SchemaTypes.ObjectId, ref:'Question' ,required:true},
+        commentID: {type:String},
+        parentID:{type:mongoose.Schema.Types.ObjectId, ref:'Comment'},
+        content: {type:String},
         createdAt: {type:Date, default:Date.now},
         lastUpdate: {type:Date, default:Date.now},
-        authorNickname: String,
-        authorID: {type:mongoose.Schema.Types.ObjectId, ref:'User'}
+        authorNickname: {type:String},
+        authorID: {type:String},
+        //authorID: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
+        isDeleted:{type:Boolean , default:false}
     }
 });
 
