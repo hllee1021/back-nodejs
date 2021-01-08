@@ -11,7 +11,7 @@ const commentSchema = new Schema({
         createdAt: {type:Date, default:Date.now},
         lastUpdate: {type:Date, default:Date.now},
         authorNickname: {type:String},
-        authorID: {type:String},
+        authorID: {type:String, required:true},
         //authorID: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
         isDeleted:{type:Boolean , default:false}
     }

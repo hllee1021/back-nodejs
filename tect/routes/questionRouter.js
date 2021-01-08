@@ -9,23 +9,24 @@ const { json } = require('body-parser');
 
 //전체 읽어오기
 router.get('/', (req, res) => {
-  Question.find((err, lists) => {
-    if (err) {
-      return res.status(500).send('Cannot Get Question')
-    } else {
-      res.json(lists);
+  Question.find()
+  .lean()
+  .exec()
+  .then((questionList)=>{
+
+    for (i in questionList) {
+      questionID = questionList[i]._id;
+      Answer.find({"answerBody.postID":questionID}).then(answerLists=>{
+        answerNum = answerLists.length;
+        questionList[i].questionBody.answerNum = answerNum;
+        console.log(questionList[i].questionBody)
+      })
     }
+    res.json(questionList)
   })
+  .catch(e=>{return res.status(500).send("Can't Get Question Lists")})
 })
 
-
-// //postID 이용해서 읽어오기
-// router.get('/:postID', (req, res) => {
-//   Question.findOne({ _id: req.params.postID }, (err, post) => {
-//     if (err) return res.status(500).send("Cannot Get Question by ID")
-//     res.json(post);
-//   })
-// })
 
 router.get('/:postID', (req, res) => {
     Promise.all([
@@ -47,9 +48,6 @@ router.get('/:postID', (req, res) => {
     })
   })
   
-
-
-
 
 //Question 작성
 router.post('/', (req, res) => {

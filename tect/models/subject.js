@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const subjectSchema = new Schema({
   subjectName: {type: String},
   authorNickname: { type: String},
-  authorUID: { type: String},
+  authorID: { type: String},
   content: { type: String},
   createdAt: { type: Date, default:Date.now}
 });
