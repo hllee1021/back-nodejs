@@ -24,11 +24,12 @@ router.get('/:userID', (req, res) => {
 
 router.post('/', (req, res)=> {
   const post= new User();
-  const USER_ID = req.body.userID
+  const USER_ID = req.body.authorID
 
-  post._id = mongoose.Types.ObjectId(USER_ID);
+  // post._id = mongoose.Types.ObjectId(USER_ID);
+  post.userBody.authorID = req.body.authorID
   post.userBody.email=req.body.email;
-  post.userBody.nickname=req.body.nickname;
+  post.userBody.authorNickname=req.body.authorNickname;
   post.userBody.point=req.body.point;
   post.userBody.posts=req.body.posts
   

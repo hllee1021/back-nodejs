@@ -7,59 +7,26 @@ const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
 
-answerFind= async (questionID)=>{
-  await Answer.find({ "answerBody.postID": questionID })
-  .then(answerLists => {
-    const answerNum = answerLists.length;
-    console.log("find 중", i)
-  })
-  .then(()=>{
-    return answerNum
-  })
+//전체 읽어오기..성공
+router.get('/', async (req, res) => {
 
-}
-
-//전체 읽어오기
-// router.get('/', (req, res) => {
-//   Question.find()
-//     .lean() //mogoose object > plain object로 가져오기
-//     .exec()
-//     .then((questionList) => {
-//       //questionList 볼 때 answer 개수도 볼 수 있도록 loop이용해서 answerNum 추가.
-
-//       for (i in questionList) {
-//         questionID = questionList[i]._id;
-//         console.log("find 전",i)
-
-//         answerNum = answerFind(questionID)
-//         console.log(answerNum)
-//         questionList[i].questionBody.answerNum = answerNum;
-        
-//       }
-//       res.json(questionList)
-// })
-//   .catch(e => { return res.status(500).send("Can't Get Question Lists") })
-// })
-
-router.get('/', (req, res) => {
-  Question.aggregate([
-    { $match: { _id : {$exists: true} } },
-    { $lookup:{
-      from: 'answers',
-      localField:'_id',
-      foreignField:'answerBody.postID',
-      as:'answerList'
-    }}
+  var questions = await Question.aggregate([
+    { $match: { _id: { $exists: true } } },
+    {
+      $lookup: {
+        from: 'answers',
+        localField: '_id',
+        foreignField: 'answerBody.postID',
+        as: 'answerList'
+      }
+    }
   ])
-  .exec()
-  .then((questions=>{res.json(questions)}))
+    .exec()
+  
+  res.json(questions)
 })
 
-
-
-
-
-
+//questionID 이용해서 읽어오기
 router.get('/:postID', (req, res) => {
     Promise.all([
       Question.findOne({_id:req.params.postID}),
