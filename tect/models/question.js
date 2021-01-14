@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
+// 수정시작하기전임 
 // Define Schemes
 const questionSchema = new Schema({
     questionBody: {
