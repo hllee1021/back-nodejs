@@ -12,7 +12,9 @@ const questionSchema = new Schema({
         lastUpdate: {type: Date, default:Date.now},
         authorNickname: {type: String, required:true},
         authorID: {type: String, required:true},
-        hashtags:[String]
+        hashtags:[String],
+        answerID:[ mongoose.SchemaTypes.ObjectId],
+        commentID:[ mongoose.SchemaTypes.ObjectId],
     }
 });
 

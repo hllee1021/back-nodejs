@@ -6,28 +6,27 @@ const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
-const question = require('../models/question');
 
-//전체 읽어오기
-router.get('/', (req, res) => {
-  Question.find((err, lists) => {
-    if (err) {
-      return res.status(500).send('Cannot Get Question')
-    } else {
-      res.json(lists);
+//전체 읽어오기..성공
+router.get('/', async (req, res) => {
+
+  var questions = await Question.aggregate([
+    { $match: { _id: { $exists: true } } },
+    {
+      $lookup: {
+        from: 'answers',
+        localField: '_id',
+        foreignField: 'answerBody.postID',
+        as: 'answerList'
+      }
     }
-  })
+  ])
+    .exec()
+  
+  res.json(questions)
 })
 
-
-// //postID 이용해서 읽어오기
-// router.get('/:postID', (req, res) => {
-//   Question.findOne({ _id: req.params.postID }, (err, post) => {
-//     if (err) return res.status(500).send("Cannot Get Question by ID")
-//     res.json(post);
-//   })
-// })
-
+//questionID 이용해서 읽어오기
 router.get('/:postID', (req, res) => {
     Promise.all([
       Question.findOne({_id:req.params.postID}),
@@ -49,9 +48,6 @@ router.get('/:postID', (req, res) => {
   })
   
 
-
-
-
 //Question 작성
 router.post('/', (req, res) => {
   const post = new Question();
@@ -65,6 +61,8 @@ router.post('/', (req, res) => {
   post.questionBody.authorNickname = req.body.authorNickname;
   post.questionBody.authorID = req.body.authorID;
   post.questionBody.hashtags = req.body.hashtags;
+  post.questionBody.answerID = [];
+  post.questionBody.commentID = [];
 
   //DB에 저장
   post.save((err, result) => {
@@ -80,7 +78,7 @@ router.post('/', (req, res) => {
 })
 
 
-//Question 수정               
+//Question 사용자가 수정               
 router.put('/:postID', (req, res) => {
   Question.updateOne(
     { _id: req.params.postID },
