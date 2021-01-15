@@ -13,8 +13,7 @@ const CHECK_USER = async (req, res) =>{
         return user
         //user.userBody.authorID = firebase_uid
     } else {
- 
-        return 
+        return uid
         //rediret to createUser
     }
 }
@@ -43,3 +42,4 @@ const VERIFY_SESSION = async (sessionCookie) =>{
     }
 }
 module.exports = CHECK_USER
+// module.exports = CHECK_SESSION

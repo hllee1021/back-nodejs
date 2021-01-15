@@ -22,6 +22,9 @@ router.get('/:userID', (req, res) => {
   })
 })
 
+
+
+
 router.post('/', (req, res)=> {
   const post= new User();
   const USER_ID = req.body.authorID
