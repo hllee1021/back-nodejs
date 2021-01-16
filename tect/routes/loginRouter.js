@@ -7,9 +7,8 @@ const Admin = require('../firebase/index');
 app.use(cookieParser())
 const User = require('../models/user')
 
+const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth')
 
-const CHECK_USER = require('../firebase/auth')
-// const CHECK_SESSION =require('../firebase/auth')
 
 //Route
 //Profile
@@ -20,27 +19,27 @@ router.get('/profile', async (req,res)=>{
 
 
 router.get('/account', async (req,res)=>{
-    const firebase_uid = await CHECK_USER(req, res)
+    const firebase_uid = await CHECK_SESSION(req, res)
     res.json(firebase_uid)
 })
 
 
 //Create USER DATA
 router.post('/account', async (req, res) => {
-    const firebase_uid = await CHECK_SESSION(req, res)
-    
+    const sessionCookie = await MAKE_SESSION(req, res)
+    const firebase_uid = await VERIFY_SESSION(sessionCookie)
+    // console.log(sessionCookie)
+    // console.log(firebase_uid)
+
     const user = new User();
-    const USER_ID = firebase_uid
-    // post._id = mongoose.Types.ObjectId(USER_ID);
-    user.userBody.authorID = USER_ID
-    user.userBody.email = req.body.email;
+    user.userBody.authorID = firebase_uid
     user.userBody.authorNickname = req.body.authorNickname;
+    user.userBody.email = req.body.email;
     user.userBody.point = req.body.point;
     user.userBody.posts = req.body.posts
 
-
     //DB에 저장
-    post.save((err) => {
+    user.save((err) => {
         if (err) {
             console.log(err, "data save error");
             res.json({ result: 0 });
@@ -49,50 +48,31 @@ router.post('/account', async (req, res) => {
             res.json({ result: 1 });
         }
     })
-
+    // res.json("SUCCESS MAKING USER DATA")
 })
-
-
-
-
+    
+  
 
 //프론트에서 보내준 firebaseToken 이용, session cookie 생성
 //Login
-router.post('/sessionLogin', (req, res) => {
-    try {
-        const idToken = req.body.firebaseToken;
-        //production : front에서 온 CSRF tocken check 추가
-        const expiresIn = 60*60*1000
-        Admin
-            .createSessionCookie(idToken, { expiresIn })
-            .then((sessionCookie) => {
-                const options = { maxAge: expiresIn, httpOnly: true, secure: false }; //secure:true  > local에서 test위해서false
-                res.cookie('loginSession', sessionCookie, options);
-                res.end(JSON.stringify({ status: "세션 생성 및 전송 성공" }))
-            })
-            .catch((err) => {
-                res.status(401).send(err)
-            })
-    } catch (err) {
-        console.log(err)
-    }
+router.post('/sessionLogin', async (req, res) => {
+    await MAKE_SESSION(req, res)
+    res.json("session login 성공")
 })
 
 //Logout
-router.get('/sessionLogout', (req, res) => {
-    const sessionCookie = req.cookies.session || '';
-    res.clearCookie('loginSession');
-    Admin
-        .verifySessionCookie(sessionCookie)
-        .then((decodedClaims) => {
-            return Admin.revokeRefreshTokens(decodedClaims.sub);
-        })
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((error) => {
-            res.redirect('/');
-        });
+router.get('/sessionLogout', async (req, res) => {
+    try{
+        await res.clearCookie('loginSession');
+        const firebase_uid = await CHECK_SESSION(req,res)
+        await Admin.revokeRefreshTokens(firebase_uid)
+        res.redirect('/')
+        
+    } catch(err) {
+        res.json(err)
+        //res.redirect('/')
+    }
+   
 });
 
 module.exports = router;

@@ -5,15 +5,17 @@ const Schema = mongoose.Schema;
 // Define Schemes
 const questionSchema = new Schema({
     questionBody: {
-        postID: {type:String},
+        postID: {type:String}, //required:true
         title : {type: String, required:true},
         content: {type: String, required:true},
-        createdAt: {type : Date, default:Date.now},
-        lastUpdate: {type: Date, default:Date.now},
+        // createdAt: {type : Date, default:Date.now},
+        // lastUpdate: {type: Date, default:Date.now},
         authorNickname: {type: String, required:true},
         authorID: {type: String, required:true},
-        hashtags:[String]
+        hashtags:[String],
     }
+}, {
+    timestamps:true
 });
 
 

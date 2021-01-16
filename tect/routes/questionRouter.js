@@ -9,7 +9,6 @@ const { json } = require('body-parser');
 
 //전체 읽어오기..성공
 router.get('/', async (req, res) => {
-
   var questions = await Question.aggregate([
     { $match: { _id: { $exists: true } } },
     {
@@ -21,6 +20,8 @@ router.get('/', async (req, res) => {
       }
     }
   ])
+    .sort({createdAt : -1})
+    // .limit(10)
     .exec()
   
   res.json(questions)
