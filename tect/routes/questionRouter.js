@@ -9,7 +9,6 @@ const { json } = require('body-parser');
 
 //전체 읽어오기..성공
 router.get('/', async (req, res) => {
-
   var questions = await Question.aggregate([
     { $match: { _id: { $exists: true } } },
     {
@@ -21,6 +20,8 @@ router.get('/', async (req, res) => {
       }
     }
   ])
+    .sort({createdAt : -1})
+    // .limit(10)
     .exec()
   
   res.json(questions)
@@ -61,8 +62,6 @@ router.post('/', (req, res) => {
   post.questionBody.authorNickname = req.body.authorNickname;
   post.questionBody.authorID = req.body.authorID;
   post.questionBody.hashtags = req.body.hashtags;
-  post.questionBody.answerID = [];
-  post.questionBody.commentID = [];
 
   //DB에 저장
   post.save((err, result) => {
@@ -78,7 +77,7 @@ router.post('/', (req, res) => {
 })
 
 
-//Question 사용자가 수정               
+//Question 수정               
 router.put('/:postID', (req, res) => {
   Question.updateOne(
     { _id: req.params.postID },
@@ -104,7 +103,6 @@ router.delete('/:postID', (req, res) => {
     res.json({ RESULT: "DATA DELETED : ", result })
   })
 })
-
 
 //검색
 //현재 question title과 content에서 불러옴, 중간에 있어도 검색가능

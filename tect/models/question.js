@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// 수정시작하기전임 
+
 // Define Schemes
 const questionSchema = new Schema({
     questionBody: {
-        postID: {type:String},
+        postID: {type:String}, //required:true
         title : {type: String, required:true},
         content: {type: String, required:true},
-        createdAt: {type : Date, default:Date.now},
-        lastUpdate: {type: Date, default:Date.now},
+        // createdAt: {type : Date, default:Date.now},
+        // lastUpdate: {type: Date, default:Date.now},
         authorNickname: {type: String, required:true},
         authorID: {type: String, required:true},
         hashtags:[String],
-        answerID:[ mongoose.SchemaTypes.ObjectId],
-        commentID:[ mongoose.SchemaTypes.ObjectId],
     }
+}, {
+    timestamps:true
 });
 
 

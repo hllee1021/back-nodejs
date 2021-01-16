@@ -1,10 +1,7 @@
 var express = require('express');
 const router = require('express').Router();
-const Question = require('../models/question');
 const Answer = require('../models/answer');
-const Comment = require('../models/comment');
 const mongoose = require('mongoose');
-const { render } = require('pug');
 
 //ANSWER 불러오기
 router.get('/', (req, res)=>{
@@ -34,27 +31,12 @@ router.post('/', (req, res)=> {
   const POST_ID =req.body.postID
   const ANSWER_ID = req.body.answerID
 
-
-  pid= mongoose.Types.ObjectId(POST_ID);
-  aid=mongoose.Types.ObjectId(ANSWER_ID);
-  var doc;
-  Question.findOne({_id:pid}, function(err, question){
-    if(err) throw err;
-    doc = question;
-    console.log(doc);
-    doc.questionBody.answerID.push(aid);
-    console.log(doc.questionBody.answerID);
-    doc.save();
-  });
-
-
   answer.answerBody.answerID = ANSWER_ID              //front에서 사용하게 될 ID (String)
   answer._id=mongoose.Types.ObjectId(ANSWER_ID);      //back에서 사용하게 될 ID (mongoose ObjectID)
-  // answer.answerBody.postID = mongoose.Types.ObjectId(POST_ID);
+  answer.answerBody.postID = mongoose.Types.ObjectId(POST_ID);
   answer.answerBody.authorNickname=req.body.authorNickname;
   answer.answerBody.authorID=req.body.authorID;
   answer.answerBody.content=req.body.content;
-  answer.answerBody.commentId=[];
   //answer에 저장
   answer.save((err)=>{
     if (err) {
