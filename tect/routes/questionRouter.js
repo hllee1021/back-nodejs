@@ -6,6 +6,7 @@ const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
+const question = require('../models/question');
 
 //전체 읽어오기..성공
 router.get('/', async (req, res) => {
@@ -105,17 +106,41 @@ router.delete('/:postID', (req, res) => {
 })
 
 //검색
-//현재 question title과 content에서 불러옴, 중간에 있어도 검색가능
 router.post('/search', function(req, res){
   const target=req.body.target;
   const query=new RegExp(req.body.target);
-  Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},(err,lists)=>{
+  var a;
+  var uniquearr;
+  Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
     if (err) {
-      return res.status(500).send('Cannot Get Question')
+      return res.status(500).send('Error occurs during serach question')
     } else {
-      res.json(lists);
+      a=lists;
     }
+  }).exec()
+  .then((Qresult)=>{
+    return Answer.find({'answerBody.content':query},'_id',(err,lists)=>{
+      if (err) {
+        return res.status(500).send('Error occurs during serach question')
+      } else {
+        a=a.concat(lists);
+      }
+      }).exec();
   })
+  .then((QAresult)=>{
+    const set=new Set(a);
+    uniquearr=[...set];
+  })
+  .then((result)=>{
+    Question.find({$or:uniquearr},(err,lists)=>{
+      if (err) {
+        return res.status(500).send('Error occurs during serach question')
+      } else {
+        res.json(lists);
+      }
+    }).exec()
+  })
+  
 })
 
 module.exports = router;
