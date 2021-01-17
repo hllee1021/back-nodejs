@@ -51,7 +51,9 @@ router.post('/account', async (req, res) => {
     // res.json("SUCCESS MAKING USER DATA")
 })
     
-  
+router.post('/forgot', async(req,res)=>{
+    //
+})
 
 //프론트에서 보내준 firebaseToken 이용, session cookie 생성
 //Login

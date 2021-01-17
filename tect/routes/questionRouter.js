@@ -104,4 +104,45 @@ router.delete('/:postID', (req, res) => {
   })
 })
 
+
+
+//검색
+router.post('/search', function(req, res){
+  const target=req.body.target;
+  const query=new RegExp(req.body.target);
+  var a;
+  var uniquearr;
+  Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
+    if (err) {
+      return res.status(500).send('Error occurs during serach question')
+    } else {
+      a=lists;
+    }
+  }).exec()
+  .then((Qresult)=>{
+    return Answer.find({'answerBody.content':query},'answerBody.postID',(err,lists)=>{
+      if (err) {
+        return res.status(500).send('Error occurs during serach question')
+      } else {
+        a=a.concat(lists);
+      }
+      }).exec();
+  })
+  .then((QAresult)=>{
+    const set=new Set(a);
+    uniquearr=[...set];
+  })
+  .then((result)=>{
+    if(uniquearr.length==0){
+      return res.json([]);
+    }
+    Question.find({$or:uniquearr},(err,lists)=>{
+      if (err) {
+        return res.status(500).send('Error occurs during serach question')
+      } else {
+        res.json(lists);
+      }
+    }).exec()
+  })
+})
 module.exports = router;
