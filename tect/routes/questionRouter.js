@@ -120,7 +120,7 @@ router.post('/search', function(req, res){
     }
   }).exec()
   .then((Qresult)=>{
-    return Answer.find({'answerBody.content':query},'answerBody.postID',(err,lists)=>{
+    Answer.find({'answerBody.content':query},'answerBody.postID',(err,lists)=>{
       if (err) {
         return res.status(500).send('Error occurs during serach question')
       } else {
