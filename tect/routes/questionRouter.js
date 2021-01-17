@@ -119,7 +119,7 @@ router.post('/search', function(req, res){
     }
   }).exec()
   .then((Qresult)=>{
-    return Answer.find({'answerBody.content':query},'_id',(err,lists)=>{
+    return Answer.find({'answerBody.content':query},'answerBody.postID',(err,lists)=>{
       if (err) {
         return res.status(500).send('Error occurs during serach question')
       } else {
@@ -132,6 +132,9 @@ router.post('/search', function(req, res){
     uniquearr=[...set];
   })
   .then((result)=>{
+    if(uniquearr.length==0){
+      return res.json([]);
+    }
     Question.find({$or:uniquearr},(err,lists)=>{
       if (err) {
         return res.status(500).send('Error occurs during serach question')
