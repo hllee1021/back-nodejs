@@ -110,7 +110,7 @@ router.delete('/:postID', (req, res) => {
 //검색
 router.post('/search', function(req, res){
   const target=req.body.target;
-  const query=new RegExp(req.body.target,i);
+  const query=new RegExp(req.body.target,'i');
   var a;
   var uniquearr;
   async.waterfall([
