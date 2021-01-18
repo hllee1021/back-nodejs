@@ -1,12 +1,13 @@
 var express = require('express');
 const router = require('express').Router();
 const mongoose = require('mongoose');
-
+mongoose.Promise=global.Promise;
 const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
 const question = require('../models/question');
+const async = require( "async" );
 
 //전체 읽어오기..성공
 router.get('/', async (req, res) => {
@@ -111,39 +112,54 @@ router.post('/search', function(req, res){
   const query=new RegExp(req.body.target);
   var a;
   var uniquearr;
-  Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
-    if (err) {
-      return res.status(500).send('Error occurs during serach question')
-    } else {
-      a=lists;
-    }
-  }).exec()
-  .then((Qresult)=>{
-    return Answer.find({'answerBody.content':query},'answerBody.postID',(err,lists)=>{
-      if (err) {
-        return res.status(500).send('Error occurs during serach question')
-      } else {
-        a=a.concat(lists);
+  async.waterfall([
+    function(callback){
+      Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
+        console.log("hi1");
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          a=lists;
+          callback(null);
+        }
+      });
+    },
+    function(callback){
+      Answer.find({'answerBody.content':query},{_id:0,'answerBody.postID':1},(err,lists)=>{
+        console.log("hi2");
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          for(var i=0;i<lists.length;i++){
+
+          }
+          a=a.concat(lists);
+          // console.log(lists);
+          callback(null);
+        }
+      });
+    },
+    function(callback){
+      console.log("hi3");
+      const set=new Set(a);
+      uniquearr=[...set];
+      console.log(uniquearr);
+      callback(null);
+    }],
+    function(){
+      console.log("hi4");
+      if(uniquearr.length==0){
+        return res.json([]);
       }
-      }).exec();
-  })
-  .then((QAresult)=>{
-    const set=new Set(a);
-    uniquearr=[...set];
-  })
-  .then((result)=>{
-    if(uniquearr.length==0){
-      return res.json([]);
+      Question.find({$or:uniquearr},(err,lists)=>{
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          res.json(lists);
+        }
+      })
     }
-    Question.find({$or:uniquearr},(err,lists)=>{
-      if (err) {
-        return res.status(500).send('Error occurs during serach question')
-      } else {
-        res.json(lists);
-      }
-    }).exec()
-  })
-  
+  )
 })
 
 module.exports = router;
