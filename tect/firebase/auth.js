@@ -25,6 +25,7 @@ const VERIFY_SESSION = async (sessionCookie) =>{
         console.log("sessionCookie :",sessionCookie)
         const decodedClaims = await Admin.verifySessionCookie(sessionCookie, true);    
         firebase_uid = decodedClaims.sub
+        console.log(decodedClaims)
         console.log("firebase_uid :",firebase_uid)
         return firebase_uid
 
@@ -53,17 +54,18 @@ const CHECK_USER = async (req, res) =>{
 const MAKE_SESSION = async (req, res) =>{
     try {
         const idToken = req.body.firebaseToken;
+        // console.log(idToken)
         //production : front에서 온 CSRF tocken check 추가
         const expiresIn = 60*60*1000
         const sessionCookie = await Admin.createSessionCookie(idToken, {expiresIn})
-
+        console.log(sessionCookie)
         const options = { maxAge: expiresIn, httpOnly: true, secure: false } //secure:true  > local에서 test위해서false
         await res.cookie('loginSession', sessionCookie, options);
         // console.log("MAKE SESSION SUCCESS : ", sessionCookie)
         return sessionCookie
  
     } catch (err) {
-        console.log(err)
+        console.log("maeksession 오류?",err)
         //res.status(401).send(err)
     }
 }

@@ -34,7 +34,7 @@ router.post('/account', async (req, res) => {
     const user = new User();
     user.userBody.authorID = firebase_uid
     user.userBody.authorNickname = req.body.authorNickname;
-    user.userBody.email = req.body.email;
+    // user.userBody.email = req.body.email;
     user.userBody.point = req.body.point;
     user.userBody.posts = req.body.posts
 
