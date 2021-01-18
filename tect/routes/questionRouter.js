@@ -115,7 +115,6 @@ router.post('/search', function(req, res){
   async.waterfall([
     function(callback){
       Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
-        console.log("hi1");
         if (err) {
           return res.status(500).send('Error occurs during serach question')
         } else {
@@ -126,28 +125,27 @@ router.post('/search', function(req, res){
     },
     function(callback){
       Answer.find({'answerBody.content':query},{_id:0,'answerBody.postID':1},(err,lists)=>{
-        console.log("hi2");
         if (err) {
           return res.status(500).send('Error occurs during serach question')
         } else {
+          var result=[];
           for(var i=0;i<lists.length;i++){
-
+            var cur={};
+            cur['_id']=lists[i]['answerBody']['postID'];
+            result.push(cur);
           }
-          a=a.concat(lists);
+          a=a.concat(result);
           // console.log(lists);
           callback(null);
         }
       });
     },
     function(callback){
-      console.log("hi3");
       const set=new Set(a);
       uniquearr=[...set];
-      console.log(uniquearr);
       callback(null);
     }],
     function(){
-      console.log("hi4");
       if(uniquearr.length==0){
         return res.json([]);
       }
