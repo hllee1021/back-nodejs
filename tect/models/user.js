@@ -3,12 +3,13 @@ const Schema = mongoose.Schema;
 
 // Define Schemes
 const userSchema = new Schema({
-  postUID: [{type:mongoose.SchemaTypes.ObjectId}],
-  isDeleted:{type:Boolean , default:false},
   userBody: {
-    createdAt: {type:Date, default:Date.now},
+    authorID: {type: String, required:true},  //firebase uid 사용하면 될 듯 
     email: {type:String, required:true},
-    nickname: {type: String, required:true},
+    authorNickname: {type: String, trim:true, required:true},
+    postID: [{type:mongoose.SchemaTypes.ObjectId}],
+    isDeleted:{type:Boolean , default:false},
+    createdAt: {type:Date, default:Date.now},
     point:{type:Number, required:true}
   }
 });

@@ -111,3 +111,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+#firebase admin json
+tect-develop-server-firebase-adminsdk-48v4m-2db47da9cc.json
+admin_key.json

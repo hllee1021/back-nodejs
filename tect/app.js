@@ -14,17 +14,17 @@ const subjectRouter = require('./routes/subjectRouter')
 const answerRouter = require('./routes/answerRouter')
 const questionRouter = require('./routes/questionRouter')
 const commentRouter = require('./routes/commentRouter')
-// const userRouter = require('./routes/userRouter')
-// const loginRouter = require('./routes/loginRouter')
+const userRouter = require('./routes/userRouter')
+const loginRouter = require('./routes/loginRouter')
 
-// const Admin = require('./firebase/index');
+const Admin = require('./firebase/index');
 
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
 
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/tect_db?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/mymy?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 
@@ -64,6 +64,27 @@ app.get('/', (req, res) => {
 })
 
 
+<<<<<<< HEAD
+
+//HOME - firebase test
+// app.get('/sessionLogin', (req, res)=>{
+
+//   const firebase_UID = "cvrUBQ319Mcz6oBKzgVurZxEYm13"
+//   Admin.getUser(firebase_UID)
+//   .then((result)=>{
+//     res.json(result)
+//     // res.end("Login Failure")
+//   })
+//   .catch((err)=>{
+//     console.log(err)
+//   })
+// })
+
+app.get('/', (req, res) => {
+  res.end("HOME")
+})
+
+
 //CONFIGURE ROUTER
 app.use('/subject', subjectRouter)
 app.use('/answer', answerRouter)
@@ -73,5 +94,16 @@ app.use('/comment', commentRouter)
 // app.use('/login', loginRouter)
 
 
+=======
+//CONFIGURE ROUTER
+app.use('/subject', subjectRouter)
+app.use('/answer', answerRouter)
+app.use('/question' , questionRouter)
+app.use('/comment', commentRouter)
+app.use('/user', userRouter)
+app.use('/login', loginRouter)
+
+
+>>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
