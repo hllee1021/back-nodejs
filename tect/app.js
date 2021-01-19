@@ -64,37 +64,6 @@ app.get('/', (req, res) => {
 })
 
 
-<<<<<<< HEAD
-
-//HOME - firebase test
-// app.get('/sessionLogin', (req, res)=>{
-
-//   const firebase_UID = "cvrUBQ319Mcz6oBKzgVurZxEYm13"
-//   Admin.getUser(firebase_UID)
-//   .then((result)=>{
-//     res.json(result)
-//     // res.end("Login Failure")
-//   })
-//   .catch((err)=>{
-//     console.log(err)
-//   })
-// })
-
-app.get('/', (req, res) => {
-  res.end("HOME")
-})
-
-
-//CONFIGURE ROUTER
-app.use('/subject', subjectRouter)
-app.use('/answer', answerRouter)
-app.use('/question' , questionRouter)
-app.use('/comment', commentRouter)
-// app.use('/user', userRouter)
-// app.use('/login', loginRouter)
-
-
-=======
 //CONFIGURE ROUTER
 app.use('/subject', subjectRouter)
 app.use('/answer', answerRouter)
@@ -104,6 +73,5 @@ app.use('/user', userRouter)
 app.use('/login', loginRouter)
 
 
->>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));

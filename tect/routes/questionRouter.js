@@ -1,21 +1,12 @@
 var express = require('express');
 const router = require('express').Router();
 const mongoose = require('mongoose');
-<<<<<<< HEAD
-mongoose.Promise=global.Promise;
-=======
 const async = require( "async" );
 
->>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
 const Question = require('../models/question');
 const Answer = require('../models/answer');
 const Comment = require('../models/comment');
 const { json } = require('body-parser');
-<<<<<<< HEAD
-const question = require('../models/question');
-const async = require( "async" );
-=======
->>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
 
 //전체 읽어오기..성공
 router.get('/', async (req, res) => {
@@ -114,19 +105,12 @@ router.delete('/:postID', (req, res) => {
   })
 })
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
 //검색
 router.post('/search', function(req, res){
   const target=req.body.target;
   const query=new RegExp(req.body.target,'i');
-<<<<<<< HEAD
-  console.log(query);
-=======
->>>>>>> c8656e33181c88357ca08bf539c74915ddb420e2
   var a;
   var uniquearr;
   async.waterfall([
