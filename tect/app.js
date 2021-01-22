@@ -16,6 +16,7 @@ const questionRouter = require('./routes/questionRouter')
 const commentRouter = require('./routes/commentRouter')
 const userRouter = require('./routes/userRouter')
 const loginRouter = require('./routes/loginRouter')
+const imageRouter=require('./routes/imageRouter')
 
 const Admin = require('./firebase/index');
 
