@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "async": "^3.2.0",
+    "aws-sdk": "^2.830.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -18,6 +19,7 @@
     "http-errors": "~1.6.3",
     "mongoose": "^5.11.8",
     "morgan": "~1.9.1",
+    "multer-s3": "^2.9.0",
     "nodemon": "^2.0.6",
     "pug": "2.0.0-beta11",
     "waterfall": "^3.0.1"

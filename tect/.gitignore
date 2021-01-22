@@ -115,3 +115,6 @@ dist
 #firebase admin json
 tect-develop-server-firebase-adminsdk-48v4m-2db47da9cc.json
 admin_key.json
+
+# s3 for image file
+awsconfig.json
