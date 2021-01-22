@@ -72,7 +72,7 @@ app.use('/question' , questionRouter)
 app.use('/comment', commentRouter)
 app.use('/user', userRouter)
 app.use('/login', loginRouter)
-
+app.use('/image', imageRouter)
 
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
