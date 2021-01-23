@@ -10,7 +10,6 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors')
 const port = 1818;
 
-const subjectRouter = require('./routes/subjectRouter')
 const answerRouter = require('./routes/answerRouter')
 const questionRouter = require('./routes/questionRouter')
 const commentRouter = require('./routes/commentRouter')
@@ -24,7 +23,7 @@ const Admin = require('./firebase/index');
 mongoose.Promise = global.Promise;
 
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/mymy?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/dev_dlgudals?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 
@@ -65,7 +64,6 @@ app.get('/', (req, res) => {
 
 
 //CONFIGURE ROUTER
-app.use('/subject', subjectRouter)
 app.use('/answer', answerRouter)
 app.use('/question' , questionRouter)
 app.use('/comment', commentRouter)

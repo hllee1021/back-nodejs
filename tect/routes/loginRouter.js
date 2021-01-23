@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const Admin = require('../firebase/index');
 app.use(cookieParser())
-const User = require('../models/user')
 
+
+const User = require('../models/user')
 const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth')
 
 
@@ -19,24 +20,22 @@ router.get('/profile', async (req,res)=>{
 
 
 router.get('/account', async (req,res)=>{
-    const firebase_uid = await CHECK_SESSION(req, res)
-    res.json(firebase_uid)
+    const decodedClaims = await CHECK_SESSION(req, res)
+    res.json(decodedClaims)
 })
 
 
 //Create USER DATA
 router.post('/account', async (req, res) => {
     const sessionCookie = await MAKE_SESSION(req, res)
-    const firebase_uid = await VERIFY_SESSION(sessionCookie)
+    const decodedClaims = await VERIFY_SESSION(sessionCookie)
     // console.log(sessionCookie)
     // console.log(firebase_uid)
 
     const user = new User();
-    user.userBody.authorID = firebase_uid
-    user.userBody.authorNickname = req.body.authorNickname;
-    // user.userBody.email = req.body.email;
-    user.userBody.point = req.body.point;
-    user.userBody.posts = req.body.posts
+    user.email = decodedClaims.email
+    user.nickname = req.body.nickname
+    user.points= req.body.points
 
     //DB에 저장
     user.save((err) => {
@@ -66,10 +65,9 @@ router.post('/sessionLogin', async (req, res) => {
 router.get('/sessionLogout', async (req, res) => {
     try{
         await res.clearCookie('loginSession');
-        const firebase_uid = await CHECK_SESSION(req,res)
-        await Admin.revokeRefreshTokens(firebase_uid)
+        const decodedClaims = await CHECK_SESSION(req, res)
+        await Admin.revokeRefreshTokens(decodedClaims.sub)
         res.redirect('/')
-        
     } catch(err) {
         res.json(err)
         //res.redirect('/')

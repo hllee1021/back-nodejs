@@ -11,9 +11,9 @@ const User = require('../models/user')
 const CHECK_SESSION = async (req, res) => {
     try {
         const sessionCookie = req.cookies.loginSession || ''
-        firebase_uid = await VERIFY_SESSION(sessionCookie);
-        console.log('CHECK SESSION:',firebase_uid)
-        return firebase_uid
+        decodedClaims = await VERIFY_SESSION(sessionCookie);
+        console.log('firebase Login Data:',decodedClaims)
+        return decodedClaims
     } catch (err) {
         console.log("CANNOT FIND SESSION COOKIE",err)
         // return (err)
@@ -22,12 +22,12 @@ const CHECK_SESSION = async (req, res) => {
 //2. Decoding Session
 const VERIFY_SESSION = async (sessionCookie) =>{
     try {
-        console.log("sessionCookie :",sessionCookie)
+        // console.log("sessionCookie :",sessionCookie)
         const decodedClaims = await Admin.verifySessionCookie(sessionCookie, true);    
         firebase_uid = decodedClaims.sub
-        console.log(decodedClaims)
-        console.log("firebase_uid :",firebase_uid)
-        return firebase_uid
+        // console.log(decodedClaims)
+        // console.log("firebase_uid :",firebase_uid)
+        return decodedClaims
 
     } catch(err) {
         console.log("CANNOT VERIFY SESSION COOKIE",err);
@@ -37,8 +37,10 @@ const VERIFY_SESSION = async (sessionCookie) =>{
 
 //3. Finding in Database
 const CHECK_USER = async (req, res) =>{
-    const uid = await CHECK_SESSION(req, res)
-    const user = await User.findOne({"userBody.authorID":uid}) 
+    const decodedClaims = await CHECK_SESSION(req, res)
+    // const uid = decodedClaims.uid
+    const email = decodedClaims.email
+    const user = await User.findOne({"email":email}) 
     if (user) {
         console.log("CHECK USER")
         return user
