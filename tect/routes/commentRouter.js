@@ -61,7 +61,7 @@ router.post('/', async (req, res) => {
     const user = await CHECK_USER(req, res)
     db_user = await User.findOne({email:user.email}).exec()
     console.log(db_user)
-    db_user.posts.push(COMMENT_ID)
+    db_user.posts.comment.push(COMMENT_ID)
     db_user.save((err, result)=>{
       if(err) {
         console.log(err)

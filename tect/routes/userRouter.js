@@ -21,48 +21,25 @@ router.get('/', (req, res)=>{
 })
 
 //userID 이용해서 읽어오기
-router.get('/:userID', (req, res) => {
-  User.findOne({ _id: req.params.userID }, (err, user) => {
-    if (err) return res.status(500).send("Cannot Get USER by ID")
-    res.json(user);
-  })
+router.get('/:userID', async (req, res) => {
+  try{
+    user = await User.findOne({ _id: req.params.userID })
+    .populate('posts.question')
+    .populate('posts.answer')
+    .populate('posts.comment').exec()
+    res.json(user)
+  } catch(err) {
+    res.json(err)
+  }
 })
-
-
-
-
-router.post('/', (req, res)=> {
-  const post= new User();
-  const USER_ID = req.body.authorID
-
-  // post._id = mongoose.Types.ObjectId(USER_ID);
-  post.userBody.authorID = req.body.authorID
-  post.userBody.email=req.body.email;
-  post.userBody.authorNickname=req.body.authorNickname;
-  post.userBody.point=req.body.point;
-  post.userBody.posts=req.body.posts
-  
-  //DB에 저장
-  post.save((err)=>{
-    if (err) {
-      console.log(err, "data save error");
-      res.json({result: 0});
-      return
-    } else {
-      res.json({result:1});
-    }
-  })
-})
-
 
 router.put('/:userID', (req, res) => {
   User.updateOne(
     { _id: req.params.userID },
     {
       $set: {
-        'userBody.nickname': req.body.nickname,
-        'userBody.point': req.body.point,
-        'userBody.point': req.body.point,
+        'nickname': req.body.nickname,
+        'point': req.body.point
       }
     },
     (err, result) => {

@@ -11,7 +11,11 @@ const userSchema = new Schema({
   nickname:{type:String, required:true, unique:true},
   deleted:{type:Boolean, default:false},
   points:{type:Number, default:0},
-  posts:[mongoose.Schema.Types.ObjectId],
+  posts:{
+    question:[{type:mongoose.Schema.Types.ObjectId, ref:'Question'}],
+    answer:[{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}],
+    comment:[{type:mongoose.Schema.Types.ObjectId, ref:'Comment'}]
+  }
   //아래 처럼 나누는게 좋을지도?
   // posts:{
     // QueistonID:]

@@ -103,7 +103,7 @@ router.get('/:postID', async (req, res) => {
       $lookup: {
         from: 'users',
         localField: '_id',
-        foreignField: 'posts',
+        foreignField: 'posts.question',
         as: 'questionAuthor'
       }
     },
@@ -125,7 +125,7 @@ router.get('/:postID', async (req, res) => {
       $lookup: {
         from: "users",
         localField: "questionComment._id",
-        foreignField: 'posts',
+        foreignField: 'posts.comment',
         as: 'questionCommentAuthor'
       }
     }
@@ -138,7 +138,7 @@ router.get('/:postID', async (req, res) => {
       $lookup: {
         from: 'users',
         localField: '_id',
-        foreignField: 'posts',
+        foreignField: 'posts.answer',
         as: 'answerAuthor'
       }
     },
@@ -160,7 +160,7 @@ router.get('/:postID', async (req, res) => {
       $lookup: {
         from: "users",
         localField: "answerComment._id",
-        foreignField: 'posts',
+        foreignField: 'posts.comment',
         as: 'answerCommentAuthor'
       }
     }
@@ -203,7 +203,7 @@ router.post('/', async (req, res) => {
     const user = await CHECK_USER(req, res)
     db_user = await User.findOne({email:user.email}).exec()
     console.log(db_user)
-    db_user.posts.push(QUESTION_ID)
+    db_user.posts.question.push(QUESTION_ID)
     db_user.save((err, result)=>{
       if(err) {
         console.log(err)
