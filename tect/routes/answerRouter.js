@@ -3,6 +3,8 @@ const router = require('express').Router();
 const Answer = require('../models/answer');
 const mongoose = require('mongoose');
 
+const User = require('../models/user')
+const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth');
 //ANSWER 불러오기 이것도 필요없고
 router.get('/', (req, res)=>{
   Answer.find((err, lists)=>{
@@ -27,16 +29,6 @@ router.get('/:answerID', (req, res) => {
 
 //ANSWER 작성
 router.post('/', async (req, res)=> {
-  try {
-    const user = await CHECK_USER(req, res)
-    db_user = await User.findOne({email:user.email}).exec()
-    console.log(db_user)
-    var USER_ID = db_user._id
-    var USER_NICKNAME = db_user.nickname
-  } catch {
-    var USER_ID = mongoose.Types.ObjectId();
-    var USER_NICKNAME = req.body.authorName
-  }
 
   const answer= new Answer();
   const POST_ID =req.body.postID
@@ -45,9 +37,6 @@ router.post('/', async (req, res)=> {
   answer._id=mongoose.Types.ObjectId(ANSWER_ID);   
   answer.postID = mongoose.Types.ObjectId(POST_ID);
   answer.content=req.body.content;
-  answer.authorName=USER_NICKNAME
-  answer.author=USER_ID
-  
   //answer에 저장
   answer.save((err)=>{
     if (err) {
@@ -58,6 +47,25 @@ router.post('/', async (req, res)=> {
       res.json({result:1});
     }
   })
+
+  try {
+    const user = await CHECK_USER(req, res)
+    db_user = await User.findOne({email:user.email}).exec()
+    console.log(db_user)
+    db_user.posts.push(ANSWER_ID)
+    db_user.save((err, result)=>{
+      if(err) {
+        console.log(err)
+      } else {
+        console.log(result)
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    // var USER_ID = mongoose.Types.ObjectId();
+
+  }
+
 })
 
 

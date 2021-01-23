@@ -32,16 +32,6 @@ router.get('/:commentID', (req, res) => {
 
 //COMMENT 작성
 router.post('/', async (req, res) => {
-  try {
-    const user = await CHECK_USER(req, res)
-    db_user = await User.findOne({email:user.email}).exec()
-    console.log(db_user)
-    var USER_ID = db_user._id
-    var USER_NICKNAME = db_user.nickname
-  } catch {
-    var USER_ID = mongoose.Types.ObjectId();
-    var USER_NICKNAME = req.body.authorName
-  }
 
   const comment = new Comment();
   const POST_ID = req.body.postID
@@ -55,8 +45,6 @@ router.post('/', async (req, res) => {
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
   comment.postType = POST_TYPE
-  comment.author = USER_ID;
-  comment.authorName=USER_NICKNAME
 
   comment.save((err) => {
     if (err) {
@@ -68,21 +56,38 @@ router.post('/', async (req, res) => {
     }
   })
 
-  if (POST_TYPE = "question") {
-    question = await Question.findOne({_id:POST_ID}).exec()
-    question.comments.push(comment._id)
-    question.save((err)=>{
-      if(err) {console.log(err)}
-      else {console.log(question)}
+
+  try {
+    const user = await CHECK_USER(req, res)
+    db_user = await User.findOne({email:user.email}).exec()
+    console.log(db_user)
+    db_user.posts.push(COMMENT_ID)
+    db_user.save((err, result)=>{
+      if(err) {
+        console.log(err)
+      } else{
+        console.log(result)
+      }
     })
-  } else if (POST_TYPE='answer') {
-    answer = await Answer.findOne({_id:POST_ID}).exec()
-    answer.comments.push(comment._id)
-    answer.save((err)=>{
-      if(err) {console.log(err)}
-      else {console.log(answer)}
-    }) 
-    }
+  } catch (err){
+    console.log(err)
+    // var USER_ID = mongoose.Types.ObjectId();
+  }
+  // if (POST_TYPE = "question") {
+  //   question = await Question.findOne({_id:POST_ID}).exec()
+  //   question.comments.push(comment._id)
+  //   question.save((err)=>{
+  //     if(err) {console.log(err)}
+  //     else {console.log(question)}
+  //   })
+  // } else if (POST_TYPE='answer') {
+  //   answer = await Answer.findOne({_id:POST_ID}).exec()
+  //   answer.comments.push(comment._id)
+  //   answer.save((err)=>{
+  //     if(err) {console.log(err)}
+  //     else {console.log(answer)}
+  //   }) 
+  //   }
 
 })
 

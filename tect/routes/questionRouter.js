@@ -87,52 +87,91 @@ router.get('/', async (req, res) => {
 
 //populate 안되면 그냥 json 반환하도록 만들기 (현재는 populate 오류 시 빈 객체 반환)
 router.get('/:postID', async (req, res) => {
-  try {
-    question = await Question.findOne({ _id: req.params.postID }).populate('author').exec();
-    question_comments = await Comment.find({ postID: req.params.postID, postType: "Question" }).exec() 
-    questionList={question, question_comments}
 
+  // question = await Question.findOne({ _id: req.params.postID }).populate('author').exec();
+  // question_comments = await Comment.find({ postID: req.params.postID, postType: "Question" }).exec() 
+  // questionList={question, question_comments}
 
-    answerList = await Answer.aggregate([
-      {$match:{postID:req.params.postID}},
-      {
-        $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField:'posts',
-          as: 'authorData'
-        }
-      },
-      {
-        $lookup: {
-          from: 'comments',
-          localField: '_id',
-          foreignField: 'postID',
-          as: 'commentList'
-        }
-      },
-      {
-        $unwind: "$commentList",
-        prserveNullAndEmptyArrays:true
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "commentList._id",
-          foreignField: 'postID',
-          as:'commentAuthorData'
-        }
+  questions = await Question.aggregate([
+    {$match:{_id:mongoose.Types.ObjectId(req.params.postID)}}
+  ])
+  .exec()
+
+  questionList = await Question.aggregate([
+    { $match: {_id:mongoose.Types.ObjectId(req.params.postID)} },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'posts',
+        as: 'questionAuthor'
       }
-    ])
+    },
+    {
+      $lookup: {
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'postID',
+        as: 'questionComment'
+      }
+    },
+    {
+      $unwind: {
+        path: "$questionComment",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "questionComment._id",
+        foreignField: 'posts',
+        as: 'questionCommentAuthor'
+      }
+    }
+  ])
+  .exec()
+
+  answerList = await Answer.aggregate([
+    { $match: { postID:mongoose.Types.ObjectId(req.params.postID) } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'posts',
+        as: 'answerAuthor'
+      }
+    },
+    {
+      $lookup: {
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'postID',
+        as: 'answerComment'
+      }
+    },
+    {
+      $unwind: {
+        path:"$answerComment",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "answerComment._id",
+        foreignField: 'posts',
+        as: 'answerCommentAuthor'
+      }
+    }
+  ])
     .exec()
 
-    // answerList = await Answer.find({ postID: req.params.postID }).populate('comments').exec();
-    // answer_comments = await Comment.find({ postID: req.params.postID, postType: "Answer" }).exec();
-    
-    res.json({ questionList, answerList})
-  } catch (err) {
-    res.json(err)
-  }
+  // answerList = await Answer.find({ postID: req.params.postID }).populate('comments').exec();
+  // answer_comments = await Comment.find({ postID: req.params.postID, postType: "Answer" }).exec();
+
+  res.json({ questionList, answerList })
+
 
 })
 
@@ -141,29 +180,14 @@ router.get('/:postID', async (req, res) => {
 
 //Question 작성
 router.post('/', async (req, res) => {
-  //DB에서 User 탐색 
-  try {
-    const user = await CHECK_USER(req, res)
-    db_user = await User.findOne({email:user.email}).exec()
-    console.log(db_user)
-    var USER_ID = db_user._id
-    var USER_NICKNAME = db_user.nickname
-  } catch {
-    //비로그인 시 어떻게?
-    var USER_ID = mongoose.Types.ObjectId();
-    var USER_NICKNAME = req.body.authorName
-  }
-
   const post = new Question();
   const QUESTION_ID = req.body.postID
   post._id = mongoose.Types.ObjectId(QUESTION_ID); 
   post.title = req.body.title;
   post.content = req.body.content;
   post.hashtags = req.body.hashtags;
-  post.author = USER_ID
-  post.authorName = USER_NICKNAME
 
-  //DB에 저장
+  //Question DB에 저장
   post.save((err, result) => {
     if (err) {
       res.json({ ERROR: "DATA SAVE ERROR" });
@@ -174,6 +198,24 @@ router.post('/', async (req, res) => {
       res.json({ RESULT: "DATA SAVED : ", result });
     }
   })
+  //User DB에 저장
+  try {
+    const user = await CHECK_USER(req, res)
+    db_user = await User.findOne({email:user.email}).exec()
+    console.log(db_user)
+    db_user.posts.push(QUESTION_ID)
+    db_user.save((err, result)=>{
+      if(err) {
+        console.log(err)
+      } else{
+        console.log(result)
+      }
+    })
+  } catch (err){
+    console.log(err)
+    // var USER_ID = mongoose.Types.ObjectId();
+  }
+
 })
 
 //좋아요 싫어요
