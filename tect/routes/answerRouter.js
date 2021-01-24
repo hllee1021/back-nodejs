@@ -3,7 +3,9 @@ const router = require('express').Router();
 const Answer = require('../models/answer');
 const mongoose = require('mongoose');
 
-//ANSWER 불러오기
+const User = require('../models/user')
+const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth');
+//ANSWER 불러오기 이것도 필요없고
 router.get('/', (req, res)=>{
   Answer.find((err, lists)=>{
     if (err) {
@@ -15,7 +17,7 @@ router.get('/', (req, res)=>{
 })
 
 
-//answertID 이용해서 읽어오기
+//answertID 이용해서 읽어오기 이거 필요 없는 것 같으넫
 router.get('/:answerID', (req, res) => {
   Answer.findOne({ _id: req.params.answerID }).populate('postID').exec((err, lists)=>{
     if (err) return res.status(500).send("Cannot Get Answer by ID")
@@ -26,17 +28,15 @@ router.get('/:answerID', (req, res) => {
 
 
 //ANSWER 작성
-router.post('/', (req, res)=> {
+router.post('/', async (req, res)=> {
+
   const answer= new Answer();
   const POST_ID =req.body.postID
   const ANSWER_ID = req.body.answerID
-
-  answer.answerBody.answerID = ANSWER_ID              //front에서 사용하게 될 ID (String)
-  answer._id=mongoose.Types.ObjectId(ANSWER_ID);      //back에서 사용하게 될 ID (mongoose ObjectID)
-  answer.answerBody.postID = mongoose.Types.ObjectId(POST_ID);
-  answer.answerBody.authorNickname=req.body.authorNickname;
-  answer.answerBody.authorID=req.body.authorID;
-  answer.answerBody.content=req.body.content;
+         
+  answer._id=mongoose.Types.ObjectId(ANSWER_ID);   
+  answer.postID = mongoose.Types.ObjectId(POST_ID);
+  answer.content=req.body.content;
   //answer에 저장
   answer.save((err)=>{
     if (err) {
@@ -47,6 +47,25 @@ router.post('/', (req, res)=> {
       res.json({result:1});
     }
   })
+
+  try {
+    const user = await CHECK_USER(req, res)
+    db_user = await User.findOne({email:user.email}).exec()
+    console.log(db_user)
+    db_user.posts.answer.push(ANSWER_ID)
+    db_user.save((err, result)=>{
+      if(err) {
+        console.log(err)
+      } else {
+        console.log(result)
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    // var USER_ID = mongoose.Types.ObjectId();
+
+  }
+
 })
 
 
@@ -56,8 +75,8 @@ router.put('/:answerID', (req, res) => {
     { _id: req.params.answerID },
     {
       $set: {
-        'answerBody.content': req.body.content,
-        'answerBody.lastUpdate': Date.now()
+        'content': req.body.content,
+        'lastUpdate': Date.now()
       }
     },
     (err, result) => {
