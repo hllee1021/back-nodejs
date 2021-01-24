@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
         like:1,
         unlike:1,
         title:1,
-        contentSubstring:{$substr:["$content", 0, 100]},
+        contentSubstring:{$substrCP:["$content", 0, 100]},
         createdAt:1,
         updatedAt:1,
         commentSum:{$size:"$commentList"},
