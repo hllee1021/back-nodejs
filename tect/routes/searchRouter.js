@@ -9,35 +9,36 @@ const Comment = require('../models/comment');
 const { json } = require('body-parser');
 
 //검색
-router.post('/search', function(req, res){
+router.post('/', function(req, res){
     const target=req.body.target;
     const query=new RegExp(req.body.target,'i');
     var a;
     var uniquearr;
     async.waterfall([
       function(callback){
-        Question.find({$or:[{'questionBody.title':query},{'questionBody.content':query}]},'_id',(err,lists)=>{
+        Question.find({$or:[{'title':query},{'content':query}]},'_id',(err,lists)=>{
           if (err) {
             return res.status(500).send('Error occurs during serach question')
           } else {
             a=lists;
+            // console.log(a);
             callback(null);
           }
         });
       },
       function(callback){
-        Answer.find({'answerBody.content':query},{_id:0,'answerBody.postID':1},(err,lists)=>{
+        Answer.find({'content':query},{_id:0,'postID':1},(err,lists)=>{
           if (err) {
             return res.status(500).send('Error occurs during serach question')
           } else {
             var result=[];
             for(var i=0;i<lists.length;i++){
               var cur={};
-              cur['_id']=lists[i]['answerBody']['postID'];
+              cur['_id']=lists[i]['postID'];
               result.push(cur);
             }
             a=a.concat(result);
-            // console.log(lists);
+            // console.log(result);
             callback(null);
           }
         });
