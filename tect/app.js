@@ -24,7 +24,7 @@ const Admin = require('./firebase/index');
 mongoose.Promise = global.Promise;
 
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/dev_dlgudals?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/newSchema?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 
