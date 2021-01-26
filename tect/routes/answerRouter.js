@@ -4,7 +4,7 @@ const Answer = require('../models/answer');
 const mongoose = require('mongoose');
 
 const User = require('../models/user')
-const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth');
+const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/sessionAuth');
 //ANSWER 불러오기 이것도 필요없고
 router.get('/', (req, res)=>{
   Answer.find((err, lists)=>{

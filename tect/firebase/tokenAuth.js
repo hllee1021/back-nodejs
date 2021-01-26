@@ -6,9 +6,8 @@ const Admin = require('./index');
 //MongoDB User Model
 const User = require('../models/user')
 
+
 //Make MongoDB User Data with firebaseToken
-
-
 const MAKE_MONGO_USER = async (req, res) =>{
     try {
         //front에서 로그인 및 회원가입 , 토큰 전달
