@@ -12,7 +12,12 @@ const questionSchema = new Schema({
     hashtags:[String],
     like:{type:Number, default:0},
     unlike:{type:Number, default:0},
-    // author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
+
+    //V.2021 01 27
+    author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
+
+
+    
     // authorName:{type:String, required:true},
     // comments:[mongoose.Schema.Types.ObjectId, ref='comment']
     //createdAt, lastUpdate

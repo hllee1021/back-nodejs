@@ -5,25 +5,27 @@ const Question= require('./question');
 const Answer = require('./answer')
 // Define Schemes
 
-const commentSchema = new Schema({
+const answerCommentSchema = new Schema({
     // postID:{type:mongoose.Schema.Types.ObjectId, required:true, refPath:"postType"},
     // postType:{type:String, required:true, enum:[Question, Answer]},
     // parentID:{type:mongoose.Schema.Types.ObjectId, required:true},
 
-    postType:{type:String, required:true},
-    postID:{type:mongoose.Schema.Types.ObjectId, required:true},
+    // postType:{type:String, required:true},
+    answerID:{type:mongoose.Schema.Types.ObjectId, ref:'Answer', required:true},
     parentID:{type:String, required:true},
     content:{type:String, required:true},
     like:{type:Number, default:0},
     unlike:{type:Number, default:0},
     selected:{type:Boolean, default:false},
     deleted:{type:Boolean, default:false},
+    
+    author:{type:mongoose.Schema.Types.ObjectId, ref:'User'}
 }, {
     timestamps:true
 })
 
 // Create Model & Export
-module.exports = mongoose.model('Comment', commentSchema);
+module.exports = mongoose.model('AnswerComment', answerCommentSchema);
 
 
 // var commentSchema = mongoose.Schema({
