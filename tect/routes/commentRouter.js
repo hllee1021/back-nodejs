@@ -8,19 +8,21 @@ const mongoose = require('mongoose');
 
 //COMMENT 작성
 router.post('/questionComment', async (req, res) => {
+  FIREBASE_USER= await VERIFY_USER(req,res)
+  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
 
   const comment = new QuestionComment();
   const POST_ID = req.body.questionID
   const PARENT_ID = req.body.parentID
   const COMMENT_ID = req.body.commentID
-  const AUTHOR_ID = req.body.authorID
+
 
   comment._id = mongoose.Types.ObjectId(COMMENT_ID);
   comment.questionID = mongoose.Types.ObjectId(POST_ID); 
   // comment.parentID = mongoose.Types.ObjectId(PARENT_ID); //이거 어떻게 해결하지
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
-  comment.author = AUTHOR_ID
+  comment.author = MONGO_UID
 
   comment.save((err) => {
     if (err) {
@@ -35,18 +37,21 @@ router.post('/questionComment', async (req, res) => {
 
 //answerComment 작성
 router.post('/answerComment', async(req, res)=>{
+  FIREBASE_USER= await VERIFY_USER(req,res)
+  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
+
+
   const comment = new AnswerComment();
   const POST_ID = req.body.answerID
   const PARENT_ID = req.body.parentID
   const COMMENT_ID = req.body.commentID
-  const AUTHOR_ID = req.body.authorID
 
   comment._id = mongoose.Types.ObjectId(COMMENT_ID);
   comment.answerID = mongoose.Types.ObjectId(POST_ID); 
   // comment.parentID = mongoose.Types.ObjectId(PARENT_ID); //이거 어떻게 해결하지
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
-  comment.author = AUTHOR_ID
+  comment.author = MONGO_UID
 
   comment.save((err) => {
     if (err) {

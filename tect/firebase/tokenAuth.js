@@ -62,11 +62,12 @@ const VERIFY_USER = async(req, res)=>{
         //front에서 로그인 및 회원가입 , 토큰 전달
         frontToken = req.body.firebaseToken
         firebaseUser = await Admin.verifyIdToken(frontToken)
-        return firebaseUser.uid
+        return firebaseUser
     } catch(err){
         console.log("VERIFY MONGO USER WITH FIREBASE TOKEN 실패 : ", err)
         return null
     }
 }
+
 module.exports = {MAKE_MONGO_USER, FIND_MONGO_USER, VERIFY_USER}
 

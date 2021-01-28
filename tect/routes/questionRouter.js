@@ -10,16 +10,17 @@ const AnswerComment = require('../models/answerComment')
 const { json } = require('body-parser');
 
 const User = require('../models/user')
-const {VERIFY_USER} =require('../firebase/tokenAuth');
+const {VERIFY_USER, FIND_MONGO_USER} =require('../firebase/tokenAuth');
 
 
 //Question 작성
 router.post('/', async (req, res) => {
-  UID= await VERIFY_USER(req,res)
+  FIREBASE_USER= await VERIFY_USER(req,res)
+  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
 
   const post = new Question();
   const QUESTION_ID = req.body.questionID
-  const AUTHOR_ID = req.body.authorID || UID  //VERIFY_USER 하고 찾아서 넣어줘야한다
+  const AUTHOR_ID = MONGO_UID || null  //VERIFY_USER 하고 찾아서 넣어줘야한다
 
   post._id = mongoose.Types.ObjectId(QUESTION_ID); 
   post.author = mongoose.Types.ObjectId(AUTHOR_ID);
@@ -39,7 +40,7 @@ router.post('/', async (req, res) => {
     }
   })
 
-  const user = User.findeOne({firebaseUid:UID}).exec()
+  const user = User.findeOne({firebaseUid:MONGO_UID}).exec()
   user.post.push(QUESTION_ID)
   user.save((err, result)=>{
     if (err) { console.log(err)}
@@ -128,28 +129,8 @@ router.get('/:questionID', async (req, res) => {
       return answerObject
     })
   )
-  console.log("성공이다! ",answerList[0].answerComments)
-  // answerList = await answers.map(async (eachAnswer)=>{
-  //   answerComments = await AnswerComment.find({ "answerID": eachAnswer._id }).populate('author').exec()
-  //   answerObject = {eachAnswer,answerComments}
-  //   // console.log(answerObject)
-  //   console.log("1")
-  //   return answerObject
-  // })
-
   
-  // var answerList = []
-  // // answerList = post
-  // await answers.forEach(async (item) => {
-  //   await AnswerComment.find({ "answerID": item._id }).populate('author')
-  //   .exec()
-  //   .then((comments)=>{
-  //     answerList.push(item, comments)
-  //     console.log(answerList)
-  //   })
-  // })
-
-
+  console.log("성공이다! ",answerList[0].answerComments)
   res.json({ question, questionComments, answerList })
 })
 
