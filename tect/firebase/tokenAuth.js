@@ -14,10 +14,11 @@ const MAKE_MONGO_USER = async (req, res) =>{
         frontToken = req.body.firebaseToken
         firebaseUser = await Admin.verifyIdToken(frontToken)
         
-        //firebase user displayname 같이 주면 변경 후에 mongoDB에 저장
-        firebaseUser = await UPDATE_FIREBASE_USER(res,req, firebaseUser.uid)
+        // //firebase user displayname 같이 주면 변경 후에 mongoDB에 저장
+        // firebaseUser = await UPDATE_FIREBASE_USER(res,req, firebaseUser.uid)
+
         //mongoDB에 user 정보 저장
-        mongoUser = await SAVE_MONGO_USER(firebaseUser)
+        mongoUser = await SAVE_MONGO_USER(req, res, firebaseUser)
 
         return mongoUser
     }catch(err){
@@ -26,11 +27,11 @@ const MAKE_MONGO_USER = async (req, res) =>{
     }
 }
 
-const SAVE_MONGO_USER = async (firebaseUser) =>{
+const SAVE_MONGO_USER = async (req, res, firebaseUser) =>{
     const user = new User();
     user.email = firebaseUser.email;
     user.firebaseUid = firebaseUser.uid;
-    user.displayName = firebaseUser.displayName
+    user.displayName = req.body.displayName //이것 시간차이가 있으니 프론트에서 보내는 값으로 저장.
     user.save((err)=>{
         if (err) {
             console.log("MAKE_USER, MongoDB save error", err)
@@ -57,6 +58,7 @@ const FIND_MONGO_USER = async(displayName) =>{
     return mongoUser
 }
 
+
 const VERIFY_USER = async(req, res)=>{
     try {
         //front에서 로그인 및 회원가입 , 토큰 전달
@@ -68,6 +70,14 @@ const VERIFY_USER = async(req, res)=>{
         return null
     }
 }
+const FIND_MONGO_USER_BY_UID = async(frontFirebaseUid) =>{
+    //aggregate project 이용해서 uid 제외하고 보여주기?
 
-module.exports = {MAKE_MONGO_USER, FIND_MONGO_USER, VERIFY_USER}
+    mongoUser = await User.find({firebaseUid:frontFirebaseUid}).exec()
+    console.log(mongoUser)
+    return mongoUser._id
+}
+
+
+module.exports = {MAKE_MONGO_USER, FIND_MONGO_USER, VERIFY_USER,FIND_MONGO_USER_BY_UID}
 
