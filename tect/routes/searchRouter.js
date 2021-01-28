@@ -5,7 +5,7 @@ const async = require( "async" );
 
 const Question = require('../models/question');
 const Answer = require('../models/answer');
-const Comment = require('../models/comment');
+// const Comment = require('../models/comment');
 const { json } = require('body-parser');
 
 //검색

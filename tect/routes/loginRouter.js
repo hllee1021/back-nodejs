@@ -8,71 +8,26 @@ app.use(cookieParser())
 
 
 const User = require('../models/user')
-const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth')
-
-
-//Route
-//Profile
-router.get('/profile', async (req,res)=>{
-    const user =await CHECK_USER(req, res)
-    user ? res.json(user) : res.json("NO USER") //redirect to create Account
-})
-
-
-router.get('/account', async (req,res)=>{
-    const decodedClaims = await CHECK_SESSION(req, res)
-    res.json(decodedClaims)
-})
+const {MAKE_MONGO_USER, FIND_MONGO_USER} =require('../firebase/tokenAuth')
 
 
 //Create USER DATA
 router.post('/account', async (req, res) => {
-    const sessionCookie = await MAKE_SESSION(req, res)
-    const decodedClaims = await VERIFY_SESSION(sessionCookie)
-    // console.log(sessionCookie)
-    // console.log(firebase_uid)
-
-    const user = new User();
-    user.email = decodedClaims.email
-    user.nickname = req.body.nickname
-    user.points= req.body.points
-
-    //DB에 저장
-    user.save((err) => {
-        if (err) {
-            console.log(err, "data save error");
-            res.json({ result: 0 });
-            return
-        } else {
-            res.json({ result: 1 });
-        }
-    })
-    // res.json("SUCCESS MAKING USER DATA")
-})
-    
-router.post('/forgot', async(req,res)=>{
-    //
+    mongoUser = await MAKE_MONGO_USER(req, res)
+    console.log(mongoUser)
+    res.json(mongoUser)
 })
 
-//프론트에서 보내준 firebaseToken 이용, session cookie 생성
-//Login
-router.post('/sessionLogin', async (req, res) => {
-    await MAKE_SESSION(req, res)
-    res.json("session login 성공")
+
+router.get('/profile/:displayName', async(req, res)=>{
+    mongoUser = await FIND_MONGO_USER(req.params.displayName)
+    console.log(mongoUser)
+    res.json(mongoUser)
 })
 
-//Logout
-router.get('/sessionLogout', async (req, res) => {
-    try{
-        await res.clearCookie('loginSession');
-        const decodedClaims = await CHECK_SESSION(req, res)
-        await Admin.revokeRefreshTokens(decodedClaims.sub)
-        res.redirect('/')
-    } catch(err) {
-        res.json(err)
-        //res.redirect('/')
-    }
-   
-});
+router.post('/forgot/:email', async(req, res)=>{
+    //https://firebase.google.com/docs/auth/admin/email-action-links
+    res.json("forgot")
+})
 
 module.exports = router;
