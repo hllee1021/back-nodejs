@@ -4,7 +4,7 @@ const router = require('express').Router();
 const QuestionComment = require('../models/questionComment');
 const AnswerComment = require('../models/answerComment')
 const mongoose = require('mongoose');
-
+const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 
 //COMMENT 작성
 router.post('/questionComment', async (req, res) => {
@@ -38,8 +38,7 @@ router.post('/questionComment', async (req, res) => {
 //answerComment 작성
 router.post('/answerComment', async(req, res)=>{
   FIREBASE_USER= await VERIFY_USER(req,res)
-  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
-
+  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
 
   const comment = new AnswerComment();
   const POST_ID = req.body.answerID
