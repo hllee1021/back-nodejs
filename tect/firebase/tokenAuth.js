@@ -15,8 +15,8 @@ const MAKE_MONGO_USER = async (req, res) =>{
         firebaseUser = await Admin.verifyIdToken(frontToken)
         
         // //firebase user displayname 같이 주면 변경 후에 mongoDB에 저장
-        firebaseUser = await UPDATE_FIREBASE_USER(res,req, firebaseUser.uid)
-
+        firebaseUser = await UPDATE_FIREBASE_USER(req,res, firebaseUser.uid)
+        console.log(firebaseUser)
         //mongoDB에 user 정보 저장
         mongoUser = await SAVE_MONGO_USER(req, res, firebaseUser)
 
@@ -44,6 +44,7 @@ const SAVE_MONGO_USER = async (req, res, firebaseUser) =>{
 
 const UPDATE_FIREBASE_USER = async (req,res, firebaseUid) =>{
     UserRecord = await Admin.updateUser(firebaseUid, {
+        // displayName:req.body.displayName
         displayName:req.body.displayName
     })
     user = UserRecord.toJSON()
