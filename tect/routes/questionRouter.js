@@ -121,16 +121,20 @@ router.get('/:questionID', async (req, res) => {
   .populate('author')
   .exec()
 
-  answerList = await Promise.all(
-    answers.map(async (eachAnswer)=>{
-      answerComments = await AnswerComment.find({ "answerID": eachAnswer._id }).populate('author').exec()
-      answerObject = {eachAnswer,answerComments}
-      // console.log(answerObject)
-      return answerObject
-    })
-  )
+  try{
+    answerList = await Promise.all(
+      answers.map(async (eachAnswer)=>{
+        answerComments = await AnswerComment.find({ "answerID": eachAnswer._id }).populate('author').exec()
+        answerObject = {eachAnswer,answerComments}
+        // console.log(answerObject)
+        return answerObject
+      })
+    )
+  } catch(err) {
+    console.log('errr:', err)
+  }
   
-  console.log("성공이다! ",answerList[0].answerComments)
+
   res.json({ question, questionComments, answerList })
 })
 
