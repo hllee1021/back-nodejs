@@ -27,14 +27,14 @@ router.post('/', function(req, res){
         });
       },
       function(callback){
-        Answer.find({'content':query},{_id:0,'postID':1},(err,lists)=>{
+        Answer.find({'content':query},{_id:0,'questionID':1},(err,lists)=>{
           if (err) {
             return res.status(500).send('Error occurs during serach question')
           } else {
             var result=[];
             for(var i=0;i<lists.length;i++){
               var cur={};
-              cur['_id']=lists[i]['postID'];
+              cur['_id']=lists[i]['questionID'];
               result.push(cur);
             }
             a=a.concat(result);
