@@ -24,7 +24,7 @@ const Admin = require('./firebase/index');
 mongoose.Promise = global.Promise;
 
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/newSchema?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/please?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 
@@ -44,26 +44,9 @@ app.use(cookieParser());
 
 
 
-
-//HOME - firebase test
-// app.get('/sessionLogin', (req, res)=>{
-
-//   const firebase_UID = "cvrUBQ319Mcz6oBKzgVurZxEYm13"
-//   Admin.getUser(firebase_UID)
-//   .then((result)=>{
-//     res.json(result)
-//     // res.end("Login Failure")
-//   })
-//   .catch((err)=>{
-//     console.log(err)
-//   })
-// })
-
 app.get('/', (req, res) => {
   res.end("HOME")
 })
-
-
 //CONFIGURE ROUTER
 app.use('/answer', answerRouter)
 app.use('/question' , questionRouter)

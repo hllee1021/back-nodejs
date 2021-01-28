@@ -8,7 +8,7 @@ app.use(cookieParser())
 
 
 const User = require('../models/user')
-const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/auth')
+const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/sessionAuth');
 
 
 //Route

@@ -6,11 +6,15 @@ const Schema = mongoose.Schema;
 
 const answerSchema = new Schema({
   type:{type:String, default:"answer"},
-  postID:{type:mongoose.Schema.Types.ObjectId, ref:'Question'},
+  questionID:{type:mongoose.Schema.Types.ObjectId, ref:'Question'},
   content:{type:String, required:true},
   like:{type:Number, default:0},
   unlike:{type:Number, default:0},
   selected:{type:Boolean, default:false},
+
+   //V.2021 01 27
+   author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
+
 }, {
   timestamps:true
 })

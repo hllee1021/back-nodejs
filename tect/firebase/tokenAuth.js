@@ -6,9 +6,8 @@ const Admin = require('./index');
 //MongoDB User Model
 const User = require('../models/user')
 
+
 //Make MongoDB User Data with firebaseToken
-
-
 const MAKE_MONGO_USER = async (req, res) =>{
     try {
         //front에서 로그인 및 회원가입 , 토큰 전달
@@ -42,7 +41,7 @@ const SAVE_MONGO_USER = async (firebaseUser) =>{
     })
 }
 
-const UPDATE_FIREBASE_USER = async (res, req, firebaseUid) =>{
+const UPDATE_FIREBASE_USER = async (req,res, firebaseUid) =>{
     UserRecord = await Admin.updateUser(firebaseUid, {
         displayName:req.body.displayName
     })
@@ -58,16 +57,16 @@ const FIND_MONGO_USER = async(displayName) =>{
     return mongoUser
 }
 
-const VERIFY_USER = async(res, req)=>{
+const VERIFY_USER = async(req, res)=>{
     try {
         //front에서 로그인 및 회원가입 , 토큰 전달
         frontToken = req.body.firebaseToken
         firebaseUser = await Admin.verifyIdToken(frontToken)
-        return firebaseUser
+        return firebaseUser.uid
     } catch(err){
         console.log("VERIFY MONGO USER WITH FIREBASE TOKEN 실패 : ", err)
         return null
     }
 }
-module.exports = {MAKE_MONGO_USER, FIND_MONGO_USER}
+module.exports = {MAKE_MONGO_USER, FIND_MONGO_USER, VERIFY_USER}
 
