@@ -8,12 +8,13 @@ const {VERIFY_USER} =require('../firebase/tokenAuth');
 
 //ANSWER 작성
 router.post('/', async (req, res)=> {
-  UID= await VERIFY_USER(req,res)
-
+  FIREBASE_USER= await VERIFY_USER(req,res)
+  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
+  
   const answer= new Answer();
   const POST_ID =req.body.questionID
   const ANSWER_ID = req.body.answerID
-  const AUTHOR_ID = req.body.authorID || UID //VERIFY_USER 하고 찾아서 넣어줘야한다
+  const AUTHOR_ID = MONGO_UID || null //VERIFY_USER 하고 찾아서 넣어줘야한다
   
   answer._id=mongoose.Types.ObjectId(ANSWER_ID);   
   answer.author = mongoose.Types.ObjectId(AUTHOR_ID);
