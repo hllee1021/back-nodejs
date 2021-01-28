@@ -17,7 +17,7 @@ const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 router.post('/', async (req, res) => {
   FIREBASE_USER= await VERIFY_USER(req,res)
   MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-
+  console.log(MONGO_UID)
   const post = new Question();
   const QUESTION_ID = req.body.questionID
   const AUTHOR_ID = MONGO_UID || null  //VERIFY_USER 하고 찾아서 넣어줘야한다

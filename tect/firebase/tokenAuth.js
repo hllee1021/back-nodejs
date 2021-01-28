@@ -15,7 +15,7 @@ const MAKE_MONGO_USER = async (req, res) =>{
         firebaseUser = await Admin.verifyIdToken(frontToken)
         
         // //firebase user displayname 같이 주면 변경 후에 mongoDB에 저장
-        // firebaseUser = await UPDATE_FIREBASE_USER(res,req, firebaseUser.uid)
+        firebaseUser = await UPDATE_FIREBASE_USER(res,req, firebaseUser.uid)
 
         //mongoDB에 user 정보 저장
         mongoUser = await SAVE_MONGO_USER(req, res, firebaseUser)
@@ -72,10 +72,10 @@ const VERIFY_USER = async(req, res)=>{
 }
 const FIND_MONGO_USER_BY_UID = async(frontFirebaseUid) =>{
     //aggregate project 이용해서 uid 제외하고 보여주기?
-
+    
     mongoUser = await User.find({firebaseUid:frontFirebaseUid}).exec()
-    console.log(mongoUser)
-    return mongoUser._id
+    console.log(mongoUser[0]._id)
+    return mongoUser[0]._id
 }
 
 
