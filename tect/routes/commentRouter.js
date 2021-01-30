@@ -9,7 +9,7 @@ const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 //COMMENT 작성
 router.post('/questionComment', async (req, res) => {
   FIREBASE_USER= await VERIFY_USER(req,res)
-  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
+  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)[0]._id
 
   const comment = new QuestionComment();
   const POST_ID = req.body.questionID
@@ -36,7 +36,7 @@ router.post('/questionComment', async (req, res) => {
 })
 
 //answerComment 작성
-router.post('/answerComment', async(req, res)=>{
+router.post('/answerComment', async (req, res)=>{
   FIREBASE_USER= await VERIFY_USER(req,res)
   MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
 

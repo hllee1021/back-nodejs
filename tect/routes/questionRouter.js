@@ -16,7 +16,7 @@ const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 //Question 작성
 router.post('/', async (req, res) => {
   FIREBASE_USER= await VERIFY_USER(req,res)
-  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
+  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)[0]._id
   console.log(MONGO_UID)
   const post = new Question();
   const QUESTION_ID = req.body.questionID
@@ -49,7 +49,9 @@ router.post('/', async (req, res) => {
 
 
 //전체 읽어오기
-router.get('/', async (req, res) => {
+router.get('/page/:page', async (req, res) => {
+  var page = req.params.page
+  var offset = (page-1)*10
   var questions = await Question.aggregate([
     { $match: { _id: { $exists: true } } },
     {
@@ -89,15 +91,18 @@ router.get('/', async (req, res) => {
         createdAt:1,
         updatedAt:1,
         commentSum:{$size:"$commentList"},
-        answerSum:{$size:"$answerList"}
+        answerSum:{$size:"$answerList"},
+        // questionSum:{$size:"$question"}
       }
     }
   ])
-    .sort({createdAt : -1})
-    .limit(10)
-    .exec()
-
-  res.json(questions)
+  .sort({createdAt : -1})
+  .skip(offset)
+  .limit(10)
+  .exec()
+  
+  var questionSum = await Question.find().count()
+  res.send({questionSum: questionSum, question : questions})
 })
 
 

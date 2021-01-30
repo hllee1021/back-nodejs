@@ -65,6 +65,7 @@ const VERIFY_USER = async(req, res)=>{
         //front에서 로그인 및 회원가입 , 토큰 전달
         frontToken = req.body.firebaseToken
         firebaseUser = await Admin.verifyIdToken(frontToken)
+        console.log("여기" ,firebaseUser)
         return firebaseUser
     } catch(err){
         console.log("VERIFY MONGO USER WITH FIREBASE TOKEN 실패 : ", err)
@@ -76,7 +77,7 @@ const FIND_MONGO_USER_BY_UID = async(frontFirebaseUid) =>{
     
     mongoUser = await User.find({firebaseUid:frontFirebaseUid}).exec()
     console.log(mongoUser[0]._id)
-    return mongoUser[0]._id
+    return mongoUser
 }
 
 
