@@ -11,6 +11,7 @@ router.post('/', async (req, res)=> {
   FIREBASE_USER= await VERIFY_USER(req,res)
   MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
   MONGO_UID = MONGO_USER[0]._id
+  
   const answer= new Answer();
   const POST_ID =req.body.questionID
   const ANSWER_ID = req.body.answerID
