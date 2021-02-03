@@ -17,6 +17,7 @@ const userRouter = require('./routes/userRouter')
 const loginRouter = require('./routes/loginRouter')
 const imageRouter=require('./routes/imageRouter')
 const searchRouter=require('./routes/searchRouter')
+const techTreeRouter =require('./routes/techTreeRouter')
 const Admin = require('./firebase/index');
 
 
@@ -56,5 +57,6 @@ app.use('/user', userRouter)
 app.use('/login', loginRouter)
 app.use('/image', imageRouter)
 app.use('/search',searchRouter)
+app.use('/techTree', techTreeRouter)
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
