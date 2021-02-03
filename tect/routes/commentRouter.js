@@ -40,7 +40,7 @@ router.post('/answerComment', async (req, res)=>{
   FIREBASE_USER= await VERIFY_USER(req,res)
   MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
   MONGO_UID = MONGO_USER[0]._id
-  
+
   const comment = new AnswerComment();
   const POST_ID = req.body.answerID
   const PARENT_ID = req.body.parentID
@@ -51,7 +51,7 @@ router.post('/answerComment', async (req, res)=>{
   // comment.parentID = mongoose.Types.ObjectId(PARENT_ID); //이거 어떻게 해결하지
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
-  comment.author = MONGO_UID
+  comment.author = mongoose.Types.ObjectId(MONGO_UID)
 
   comment.save((err) => {
     if (err) {
