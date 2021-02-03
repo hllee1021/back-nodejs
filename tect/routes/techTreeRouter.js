@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const TechTree = require('../models/techTree');
 const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 
-router.post('/techTree', async(req, res)=>{
+router.post('/', async(req, res)=>{
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
     MONGO_UID = MONGO_USER[0]._id
@@ -28,7 +28,7 @@ router.post('/techTree', async(req, res)=>{
 
 })
 
-router.get('/techTree', async(req,res)=>{
+router.get('/', async(req,res)=>{
     try{
         treeDataList=await TechTree.find().populate('author').exec()
         res.json(treeDataList) 
@@ -38,7 +38,7 @@ router.get('/techTree', async(req,res)=>{
 
 })
 
-router.get('/techTree/:treeID', async(req, res)=>{
+router.get('/:treeID', async(req, res)=>{
     try{
         treeData= await TechTree.findOne({_id:req.params.treeID}).populate('author').exec()
         res.json(treeData)
