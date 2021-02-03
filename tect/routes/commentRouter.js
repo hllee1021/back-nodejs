@@ -23,7 +23,7 @@ router.post('/questionComment', async (req, res) => {
   // comment.parentID = mongoose.Types.ObjectId(PARENT_ID); //이거 어떻게 해결하지
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
-  answer.author = mongoose.Types.ObjectId(AUTHOR_ID);
+  comment.author = mongoose.Types.ObjectId(AUTHOR_ID);
 
   comment.save((err) => {
     if (err) {
@@ -53,7 +53,7 @@ router.post('/answerComment', async (req, res)=>{
   // comment.parentID = mongoose.Types.ObjectId(PARENT_ID); //이거 어떻게 해결하지
   comment.parentID = PARENT_ID
   comment.content = req.body.content;
-  answer.author = mongoose.Types.ObjectId(AUTHOR_ID);
+  comment.author = mongoose.Types.ObjectId(AUTHOR_ID);
 
   comment.save((err) => {
     if (err) {
