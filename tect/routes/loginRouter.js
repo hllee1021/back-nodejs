@@ -8,7 +8,7 @@ app.use(cookieParser())
 
 
 const User = require('../models/user')
-const {MAKE_MONGO_USER, FIND_MONGO_USER} =require('../firebase/tokenAuth')
+const {MAKE_MONGO_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth')
 
 
 //Create USER DATA
@@ -19,8 +19,8 @@ router.post('/account', async (req, res) => {
 })
 
 
-router.get('/profile/:displayName', async(req, res)=>{
-    mongoUser = await FIND_MONGO_USER(req.params.displayName)
+router.get('/profile/:firebaseUid', async(req, res)=>{
+    mongoUser = await FIND_MONGO_USER_BY_UID(req.params.firebaseUid)
     console.log(mongoUser)
     res.json(mongoUser)
 })
