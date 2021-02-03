@@ -28,6 +28,7 @@ mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 
+mongoose.set('useCreateIndex', true)
 //CORS ALLOW    나중에는 사용방법 바꿔야 할 듯
 //app.use(cors())
 app.use(cors({

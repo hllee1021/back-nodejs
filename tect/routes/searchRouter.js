@@ -63,40 +63,63 @@ router.post('/', function(req, res){
     )
   })
 
-  router.post('/hash', function(req, res){
-    const target=req.body.target;
-    // const query=new RegExp(req.body.target,'i');
-    var a;
-    var uniquearr;
-    async.waterfall([
-      function(callback){
-        Question.find({hashtags:{$in:[target]}},'_id',(err,lists)=>{
-          if (err) {
-            return res.status(500).send('Error occurs during serach question')
-          } else {
-            a=lists;
-            // console.log(a);
-            callback(null);
-          }
-        });
-      },
-      function(callback){
-        const set=new Set(a);
-        uniquearr=[...set];
-        callback(null);
-      }],
-      function(){
-        if(uniquearr.length==0){
-          return res.json([]);
+router.post('/hash', function(req, res){
+  const target=req.body.target;
+  // const query=new RegExp(req.body.target,'i');
+  var a;
+  var uniquearr;
+  async.waterfall([
+    function(callback){
+      Question.find({hashtags:{$in:[target]}},'_id',(err,lists)=>{
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          a=lists;
+          // console.log(a);
+          callback(null);
         }
-        Question.find({$or:uniquearr},(err,lists)=>{
-          if (err) {
-            return res.status(500).send('Error occurs during serach question')
-          } else {
-            res.json(lists);
-          }
-        })
+      });
+    },
+    function(callback){
+      const set=new Set(a);
+      uniquearr=[...set];
+      callback(null);
+    }],
+    function(){
+      if(uniquearr.length==0){
+        return res.json([]);
       }
-    )
-  })
+      Question.find({$or:uniquearr},(err,lists)=>{
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          res.json(lists);
+        }
+      })
+    }
+  )
+})
+
+router.post('/hashnum', function(req, res){
+  const target=req.body.target;
+  // const query=new RegExp(req.body.target,'i');
+  var a;
+  var uniquearr;
+  async.waterfall([
+    function(callback){
+      Question.find({hashtags:{$in:[target]}},'_id',(err,lists)=>{
+        if (err) {
+          return res.status(500).send('Error occurs during serach question')
+        } else {
+          a=lists;
+          // console.log(a);
+          callback(null);
+        }
+      });
+    },],
+    function(){
+      res.send({"count":a.length});
+    }
+  )
+})
 module.exports = router;
