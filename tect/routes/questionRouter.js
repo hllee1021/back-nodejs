@@ -10,14 +10,14 @@ const AnswerComment = require('../models/answerComment')
 const { json } = require('body-parser');
 
 const User = require('../models/user')
-const {VERIFY_USER, FIND_MONGO_USER} =require('../firebase/tokenAuth');
+const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 
 
 //Question 작성
 router.post('/', async (req, res) => {
   FIREBASE_USER= await VERIFY_USER(req,res)
-  MONGO_UID = await FIND_MONGO_USER(FIREBASE_USER.displayName)._id
-
+  MONGO_UID = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)[0]._id
+  console.log(MONGO_UID)
   const post = new Question();
   const QUESTION_ID = req.body.questionID
   const AUTHOR_ID = MONGO_UID || null  //VERIFY_USER 하고 찾아서 넣어줘야한다
@@ -40,8 +40,8 @@ router.post('/', async (req, res) => {
     }
   })
 
-  const user = User.findeOne({firebaseUid:MONGO_UID}).exec()
-  user.post.push(QUESTION_ID)
+  const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec()
+  user.posts.push(QUESTION_ID)
   user.save((err, result)=>{
     if (err) { console.log(err)}
   })
@@ -49,7 +49,9 @@ router.post('/', async (req, res) => {
 
 
 //전체 읽어오기
-router.get('/', async (req, res) => {
+router.get('/page/:page', async (req, res) => {
+  var page = req.params.page
+  var offset = (page-1)*10
   var questions = await Question.aggregate([
     { $match: { _id: { $exists: true } } },
     {
@@ -89,15 +91,18 @@ router.get('/', async (req, res) => {
         createdAt:1,
         updatedAt:1,
         commentSum:{$size:"$commentList"},
-        answerSum:{$size:"$answerList"}
+        answerSum:{$size:"$answerList"},
+        // questionSum:{$size:"$question"}
       }
     }
   ])
-    .sort({createdAt : -1})
-    .limit(10)
-    .exec()
-
-  res.json(questions)
+  .sort({createdAt : -1})
+  .skip(offset)
+  .limit(10)
+  .exec()
+  
+  var questionSum = await Question.find().count()
+  res.send({questionSum: questionSum, question : questions})
 })
 
 
