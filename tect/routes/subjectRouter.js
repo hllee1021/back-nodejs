@@ -18,8 +18,7 @@ router.post('/', (req, res)=> {
   post.authorNickname=req.body.authorNickname;
   post.authorUID=req.body.authorUID;
   post.content=req.body.content;
-  post.createdAt=req.body.createdAt;
-  
+
   //DB에 저장
   post.save((err)=>{
     if (err) {
