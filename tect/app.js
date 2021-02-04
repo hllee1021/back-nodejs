@@ -1,5 +1,5 @@
 // ENV
-// require('dotenv').config();
+require('dotenv').config();
 // DEPENDENCIES
 const express = require('express');
 const app = express();
@@ -23,13 +23,12 @@ const Admin = require('./firebase/index');
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
-
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect('mongodb+srv://dlgudals:dlgudals123@subjects.3o4wh.mongodb.net/please?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect(process.env.MONGO_DATA, { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
-
 mongoose.set('useCreateIndex', true)
+
 //CORS ALLOW    나중에는 사용방법 바꿔야 할 듯
 //app.use(cors())
 app.use(cors({
@@ -45,11 +44,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-
-app.get('/', (req, res) => {
-  res.end("HOME")
-})
 //CONFIGURE ROUTER
+app.get('/', (req, res) => {
+  res.end("TECT BACKEND")
+})
 app.use('/answer', answerRouter)
 app.use('/question' , questionRouter)
 app.use('/comment', commentRouter)
