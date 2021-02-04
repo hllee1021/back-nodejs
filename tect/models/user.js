@@ -10,7 +10,8 @@ const userSchema = new Schema({
   displayName:{type:String, required:true, unique:true},
   deleted:{type:Boolean, default:false},
   points:{type:Number, default:0},
-  posts:[{type:mongoose.Schema.Types.ObjectId}]
+  posts:[{type:mongoose.Schema.Types.ObjectId}],
+  treeData:[{type:mongoose.Schema.Types.ObjectId, ref:"TechTree"}]
   //2021 01 27 
   // posts:{
   //   question:[{type:mongoose.Schema.Types.ObjectId, ref:'Question'}],
