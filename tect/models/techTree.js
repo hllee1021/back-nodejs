@@ -8,9 +8,6 @@ const techTreeSchema = new Schema({
     title:{type:String, required:true},
     hashtags:[String],
     author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
-
-   
-    
     nodeList:{
         type:String
     },

@@ -102,7 +102,7 @@ router.get('/page/:page', async (req, res) => {
   .limit(10)
   .exec()
   
-  var questionSum = await Question.find().count()
+  var questionSum = await Question.find().countDocuments()
   res.send({questionSum: questionSum, question : questions})
 })
 
