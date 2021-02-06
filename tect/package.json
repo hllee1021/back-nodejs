@@ -25,5 +25,8 @@
     "pm2": "^4.5.4",
     "pug": "2.0.0-beta11",
     "waterfall": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

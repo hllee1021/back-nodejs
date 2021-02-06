@@ -1,5 +1,6 @@
 // ENV
 require('dotenv').config();
+// const mongo_config=require("mongo_config");
 // DEPENDENCIES
 const express = require('express');
 const app = express();

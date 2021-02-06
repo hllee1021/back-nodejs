@@ -118,3 +118,6 @@ admin_key.json
 
 # s3 for image file
 awsconfig.json
+
+#pem
+tect.pem

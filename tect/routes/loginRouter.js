@@ -18,7 +18,7 @@ router.post('/account', async (req, res) => {
     res.json(mongoUser)
 })
 
-
+//여기 post 보이게 해야
 router.get('/profile/:firebaseUid', async(req, res)=>{
     mongoUser = await FIND_MONGO_USER_BY_UID(req.params.firebaseUid)
     console.log(mongoUser)
