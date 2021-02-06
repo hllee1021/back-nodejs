@@ -122,8 +122,8 @@ router.get('/hash', async (req, res) => {
 })
 
 
-router.post('/hashnum', function(req, res){
-  const target=req.body.target;
+router.get('/hashnum/:target', function(req, res){
+  const target=req.target;
   // const query=new RegExp(req.body.target,'i');
   var a;
   var uniquearr;
