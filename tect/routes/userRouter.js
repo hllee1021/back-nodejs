@@ -24,6 +24,7 @@ router.get('/', (req, res)=>{
 router.get('/:userID', async (req, res) => {
   try{
     user = await User.findOne({ _id: req.params.userID })
+    .populate('treeData')
     .populate('posts.question')
     .populate('posts.answer')
     .populate('posts.comment').exec()
