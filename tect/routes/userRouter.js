@@ -3,11 +3,11 @@ const app = express();
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const Admin = require('../firebase/index');
+
 app.use(cookieParser())
 const User = require('../models/user')
 
-const {CHECK_SESSION, CHECK_USER, VERIFY_SESSION,MAKE_SESSION} =require('../firebase/sessionAuth');
+const {MAKE_MONGO_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth')
 
 //전체 유저 읽어오기
 router.get('/', (req, res)=>{
@@ -21,9 +21,10 @@ router.get('/', (req, res)=>{
 })
 
 //userID 이용해서 읽어오기
-router.get('/:userID', async (req, res) => {
+router.get('/:firebaseUid', async (req, res) => {
+  mongoUser = await FIND_MONGO_USER_BY_UID(req.params.firebaseUid)
   try{
-    user = await User.findOne({ _id: req.params.userID })
+    user = await User.findOne({ _id: mongoUser[0]._id })
     .populate('treeData')
     .populate('posts.question')
     .populate('posts.answer')

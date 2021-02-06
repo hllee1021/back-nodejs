@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
   })
 
   const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec()
-  user.posts.push(QUESTION_ID)
+  user.posts.question.push(QUESTION_ID)
   user.save((err, result)=>{
     if (err) { console.log(err)}
   })

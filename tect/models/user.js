@@ -10,14 +10,15 @@ const userSchema = new Schema({
   displayName:{type:String, required:true, unique:true},
   deleted:{type:Boolean, default:false},
   points:{type:Number, default:0},
-  posts:[{type:mongoose.Schema.Types.ObjectId}],
-  treeData:[{type:mongoose.Schema.Types.ObjectId, ref:"TechTree"}]
+  // posts:[{type:mongoose.Schema.Types.ObjectId}],
+  treeData:[{type:mongoose.Schema.Types.ObjectId, ref:"TechTree"}],
   //2021 01 27 
-  // posts:{
-  //   question:[{type:mongoose.Schema.Types.ObjectId, ref:'Question'}],
-  //   answer:[{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}],
-  //   comment:[{type:mongoose.Schema.Types.ObjectId, ref:'Comment'}]
-  // }
+  posts:{
+    question:[{type:mongoose.Schema.Types.ObjectId, ref:'Question'}],
+    answer:[{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}],
+    questionComment:[{type:mongoose.Schema.Types.ObjectId, ref:'QuestionComment'}],
+    answerComment:[{type:mongoose.Schema.Types.ObjectId, ref:'AnswerComment'}]
+  }
 
 
 

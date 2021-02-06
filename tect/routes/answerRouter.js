@@ -1,6 +1,7 @@
 var express = require('express');
 const router = require('express').Router();
 const Answer = require('../models/answer');
+const User= require('../models/user')
 const mongoose = require('mongoose');
 
 
@@ -31,6 +32,14 @@ router.post('/', async (req, res)=> {
       res.json({result:1});
     }
   })
+
+  const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec()
+  user.posts.answer.push(ANSWER_ID)
+  user.save((err, result)=>{
+    if (err) { console.log(err)}
+  })
+
+
 })
 
 

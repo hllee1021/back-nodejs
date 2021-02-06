@@ -3,6 +3,7 @@ const router = require('express').Router();
 
 const QuestionComment = require('../models/questionComment');
 const AnswerComment = require('../models/answerComment')
+const User=require('../models/user')
 const mongoose = require('mongoose');
 const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 
@@ -34,6 +35,13 @@ router.post('/questionComment', async (req, res) => {
       res.json({ result: 1 });
     }
   })
+
+  const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec()
+  user.posts.questionComment.push(COMMENT_ID)
+  user.save((err, result)=>{
+    if (err) { console.log(err)}
+  })
+
 })
 
 //answerComment 작성 1
@@ -64,6 +72,13 @@ router.post('/answerComment', async (req, res)=>{
       res.json({ result: 1 });
     }
   })
+
+  const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec()
+  user.posts.answerComment.push(COMMENT_ID)
+  user.save((err, result)=>{
+    if (err) { console.log(err)}
+  })
+
 })
 
 
