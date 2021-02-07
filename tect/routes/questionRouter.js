@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
   FIREBASE_USER= await VERIFY_USER(req,res)
   MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
   MONGO_UID = MONGO_USER[0]._id
-  console.log(MONGO_UID)
+  // console.log(MONGO_UID)
   const post = new Question();
   const QUESTION_ID = req.body.questionID
   const AUTHOR_ID = MONGO_UID || null  //VERIFY_USER 하고 찾아서 넣어줘야한다
@@ -122,7 +122,6 @@ router.get('/:questionID', async (req, res) => {
     console.log(err)
   })
     
-  
   answers = await Answer.find({"questionID": req.params.questionID })
   .populate('author')
   .exec()
@@ -140,7 +139,6 @@ router.get('/:questionID', async (req, res) => {
     console.log('errr:', err)
   }
   
-
   res.json({ question, questionComments, answerList })
 })
 

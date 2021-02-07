@@ -7,40 +7,35 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser())
 const User = require('../models/user')
 
-const {MAKE_MONGO_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth')
-
-//전체 유저 읽어오기
-router.get('/', (req, res)=>{
-  User.find((err, lists)=>{
-    if (err) {
-      return res.status(500).send('Cannot Get Answer')
-    } else {
-      res.json(lists);
-    }
-  })
-})
+const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth')
 
 //userID 이용해서 읽어오기
-router.get('/:firebaseUid', async (req, res) => {
-  mongoUser = await FIND_MONGO_USER_BY_UID(req.params.firebaseUid)
+router.get('/:displayName', async (req, res) => {
   try{
-    user = await User.findOne({ _id: mongoUser[0]._id })
+    user = await User.findOne({ displayName: req.params.displayName })
     .populate('treeData')
     .populate('posts.question')
     .populate('posts.answer')
-    .populate('posts.comment').exec()
+    .populate('posts.questionComment')
+    .populate('posts.answerComment')
+    .exec()
     res.json(user)
   } catch(err) {
     res.json(err)
   }
 })
 
-router.put('/:userID', (req, res) => {
+
+router.put('/update', async (req, res) => {
+  FIREBASE_USER= await VERIFY_USER(req,res)
+  MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
+  MONGO_UID = MONGO_USER[0]._id
+
   User.updateOne(
-    { _id: req.params.userID },
+    { _id: MONGO_UID },
     {
       $set: {
-        'nickname': req.body.nickname,
+        'displayName': req.body.displayname,
         'point': req.body.point
       }
     },
@@ -50,15 +45,7 @@ router.put('/:userID', (req, res) => {
     })
 })
 
-router.delete('/:userID', (req, res) => {
-  Question.findOne({ _id: req.params.userID }, (err, user) => {
-    if (err) return res.json({ ERROR: "DELETE FAILURE" })
-    user.isDelted = true;
-    user.save((err=>{
-      if(err) return res.json({ERROR:"USER DELETE FAILURE"})
-      res.json({RESULT:"USER DELETED"})
-    }))
-  })
-})
+// router.delete('/:userID', async (req, res) => {
+// })
 
 module.exports = router;
