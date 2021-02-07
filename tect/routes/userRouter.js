@@ -10,9 +10,9 @@ const User = require('../models/user')
 const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth')
 
 //userID 이용해서 읽어오기
-router.get('/:displayName', async (req, res) => {
+router.get('/:firebaseUid', async (req, res) => {
   try{
-    user = await User.findOne({ displayName: req.params.displayName })
+    user = await User.findOne({ firebaseUid: req.params.firebaseUid })
     .populate('treeData')
     .populate('posts.question')
     .populate('posts.answer')
