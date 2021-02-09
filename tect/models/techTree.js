@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // Define Schemes
 
 const techTreeSchema = new Schema({
-    title:{type:String, required:true},
+    title:{type:String, defalut:''},
     hashtags:[String],
     author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
     nodeList:{
