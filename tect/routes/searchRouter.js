@@ -164,22 +164,21 @@ router.get('/hash', async (req, res) => {
 
 
 router.get('/hashnum/:target', function(req, res){
-  const target=req.target;
+  const target=req.params.target;
   // const query=new RegExp(req.body.target,'i');
   var a;
   var uniquearr;
   async.waterfall([
     function(callback){
-      Question.find({hashtags:{$in:[target]}},'_id',(err,lists)=>{
+      Question.find({hashtags:target},'_id',(err,lists)=>{
         if (err) {
           return res.status(500).send('Error occurs during serach question')
         } else {
           a=lists;
-          // console.log(a);
           callback(null);
         }
       });
-    },],
+    }],
     function(){
       res.send({"count":a.length});
     }
