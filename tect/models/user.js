@@ -18,9 +18,9 @@ const userSchema = new Schema({
     answer:[{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}],
     questionComment:[{type:mongoose.Schema.Types.ObjectId, ref:'QuestionComment'}],
     answerComment:[{type:mongoose.Schema.Types.ObjectId, ref:'AnswerComment'}]
-  }
-
-
+  },
+  like:[{type:mongoose.Schema.Types.ObjectId}],
+  unlike:[{type:mongoose.Schema.Types.ObjectId}]
 
   // postList:[mongoose.Schema.Types.ObjectId, refPath="postType"],
   // postType:{type:String, enum:[Question, Answer, Comment]}
