@@ -21,6 +21,7 @@ router.post('/', async (req, res) => {
     tree.hashtags = req.body.hashtags
     tree.author = mongoose.Types.ObjectId(AUTHOR_ID)
 
+    tree.thumbnail = req.body.thumbnail
     tree.nodeList = req.body.nodeList
     tree.linkList = req.body.linkList
 

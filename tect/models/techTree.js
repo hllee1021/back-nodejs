@@ -13,7 +13,8 @@ const techTreeSchema = new Schema({
     },
     linkList:{
         type:String
-    }
+    },
+    thumbnail:{type:String}
 
 }, {
     timestamps:true
