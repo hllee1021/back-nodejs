@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const TechTree = require('../models/techTree');
 const User= require('../models/user')
 const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
+const techTree = require('../models/techTree');
 
 router.post('/', async (req, res) => {
 
@@ -42,14 +43,28 @@ router.post('/', async (req, res) => {
 
 })
 
-router.get('/', async(req,res)=>{
-    try{
-        treeDataList=await TechTree.find().populate('author').exec()
-        res.json(treeDataList) 
-    } catch(err) {
-        console.log(err)
-    }
+// router.get('/', async(req,res)=>{
+//     try{
+//         treeDataList=await TechTree.find().populate('author').exec()
+//         res.json(treeDataList) 
+//     } catch(err) {
+//         console.log(err)
+//     }
 
+// })
+router.get('/page/:page', async(req,res)=>{
+    var page=req.params.page
+    var offset=(page-1)*20
+    var techtrees = await TechTree.aggregate([
+        {$match:{_id: {$exists:true}}}
+    ])
+    .sort({createdAt:-1})
+    .skip(offset)
+    .limit(20)
+    .exec()
+
+    var techTreeSum = await TechTree.find().countDocuments()
+    res.send({techTreeSum:techTreeSum, techTree: techtrees})
 })
 
 router.get('/:treeID', async(req, res)=>{
