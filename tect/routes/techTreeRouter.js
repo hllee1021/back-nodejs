@@ -71,7 +71,8 @@ router.put('/:treeID', async(req, res)=>{
                     'title':req.body.title,
                     'hashtags':req.body.hashtags,
                     'nodeList' : req.body.nodeList,
-                    'linkList' : req.body.linkList
+                    'linkList' : req.body.linkList,
+                    'thumbnail': req.body.thumbnail
                 }
             }
         ).exec()
