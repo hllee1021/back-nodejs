@@ -56,7 +56,29 @@ router.get('/page/:page', async(req,res)=>{
     var page=req.params.page
     var offset=(page-1)*20
     var techtrees = await TechTree.aggregate([
-        {$match:{_id: {$exists:true}}}
+        {$match:{_id: {$exists:true}}},
+        {
+            $lookup:{
+                from:'users',
+                localField:'_id',
+                foreignField:'treeData',
+                as:'author'
+            }
+        },
+        {
+            $project:{
+                "author.displayName":1,
+                "author.points":1,
+                hashtags:1,
+                nodeList:1,
+                linkList:1,
+                createdAt:1,
+                updatedAt:1,
+                title:1,
+                thumbnail:1
+            }
+        }
+
     ])
     .sort({createdAt:-1})
     .skip(offset)

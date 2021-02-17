@@ -10,6 +10,7 @@ const userSchema = new Schema({
   displayName:{type:String, required:true, unique:true},
   deleted:{type:Boolean, default:false},
   points:{type:Number, default:0},
+  introduce:{type:String, default:"Hello World"},
   // posts:[{type:mongoose.Schema.Types.ObjectId}],
   treeData:[{type:mongoose.Schema.Types.ObjectId, ref:"TechTree"}],
   //2021 01 27 
