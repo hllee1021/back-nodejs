@@ -32,6 +32,7 @@ const SAVE_MONGO_USER = async (req, res, firebaseUser) =>{
     user.email = firebaseUser.email;
     user.firebaseUid = firebaseUser.uid;
     user.displayName = req.body.displayName //이것 시간차이가 있으니 프론트에서 보내는 값으로 저장.
+    user.introduce = req.body.introduce
     user.save((err)=>{
         if (err) {
             console.log("MAKE_USER, MongoDB save error", err)

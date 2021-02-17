@@ -36,7 +36,8 @@ router.put('/update', async (req, res) => {
     {
       $set: {
         'displayName': req.body.displayname,
-        'point': req.body.point
+        'point': req.body.point,
+        'introduce':req.body.point
       }
     },
     (err, result) => {
