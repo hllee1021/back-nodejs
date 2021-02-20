@@ -100,18 +100,18 @@ router.get('/:treeID', async(req, res)=>{
 
 
 router.put('/:treeID', async(req, res)=>{
+    var objForUpdate={}
+    if (req.body.title) objForUpdate.title = req.body.title
+    if (req.body.hashtags) objForUpdate.hashtags = req.body.hashtags
+    if (req.body.nodeList) objForUpdate.nodeList = req.body.nodeList
+    if (req.body.linkList) objForUpdate.linkList = req.body.linkList
+    if (req.body.thumbnail) objForUpdate.thumbnail = req.body.thumbnail
+    objForUpdate={$set:objForUpdate}
+
     try{
         result=await TechTree.updateOne(
             {_id:req.params.treeID},
-            {
-                $set:{
-                    'title':req.body.title,
-                    'hashtags':req.body.hashtags,
-                    'nodeList' : req.body.nodeList,
-                    'linkList' : req.body.linkList,
-                    'thumbnail': req.body.thumbnail
-                }
-            }
+            objForUpdate
         ).exec()
         res.json(result.ok)
     } catch(err){
