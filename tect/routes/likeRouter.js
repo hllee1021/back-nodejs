@@ -32,7 +32,7 @@ router.put('/question/like/:id',async(req,res)=>{
             }
             else{
                 Question.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                Question.findOneAndUpdate({_id:id},{$pull:{like:id}}).exec();
+                Question.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
             }
             callback(null);
         }],
