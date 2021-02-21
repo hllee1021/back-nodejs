@@ -11,7 +11,7 @@ const questionSchema = new Schema({
     content:{type:String,required:true},
     hashtags:[String],
     like:{type:Number, default:0},
-    unlike:{type:Number, default:0},
+    dislike:{type:Number, default:0},
 
     //V.2021 01 27
     author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},

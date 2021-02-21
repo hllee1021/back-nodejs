@@ -20,7 +20,7 @@ const imageRouter=require('./routes/imageRouter')
 const searchRouter=require('./routes/searchRouter')
 const techTreeRouter =require('./routes/techTreeRouter')
 const Admin = require('./firebase/index');
-
+const likeRouter=require('./routes/likeRouter');
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
@@ -57,5 +57,6 @@ app.use('/login', loginRouter)
 app.use('/image', imageRouter)
 app.use('/search',searchRouter)
 app.use('/techTree', techTreeRouter)
+app.use('/like',likeRouter)
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
