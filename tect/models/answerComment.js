@@ -15,7 +15,7 @@ const answerCommentSchema = new Schema({
     parentID:{type:String, required:true},
     content:{type:String, required:true},
     like:{type:Number, default:0},
-    unlike:{type:Number, default:0},
+    dislike:{type:Number, default:0},
     selected:{type:Boolean, default:false},
     deleted:{type:Boolean, default:false},
     like_user:[{type:mongoose.Schema.Types.ObjectId}],
