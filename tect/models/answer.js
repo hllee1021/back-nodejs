@@ -11,7 +11,7 @@ const answerSchema = new Schema({
   like:{type:Number, default:0},
   unlike:{type:Number, default:0},
   selected:{type:Boolean, default:false},
-
+  like_user:[{type:mongoose.Schema.Types.ObjectId}],
    //V.2021 01 27
    author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
 
