@@ -19,10 +19,11 @@ router.put('/question/like/:id',async(req,res)=>{
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
     MONGO_UID = MONGO_USER[0]._id
+    const user = await User.findOne({firebaseUid:FIREBASE_USER.uid}).exec();
     // const user = await User.findOne({_id:'601d1a703118730630b8d2de'}).exec();
     async.waterfall([
         function(callback){
-            if(MONGO_USER.like.includes(id)==false){
+            if(user.like.includes(id)==false){
                 console.log("qwe")
                 Question.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
                 User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
