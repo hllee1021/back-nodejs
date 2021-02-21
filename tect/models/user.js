@@ -20,7 +20,7 @@ const userSchema = new Schema({
     answerComment:[{type:mongoose.Schema.Types.ObjectId, ref:'AnswerComment'}]
   },
   like:[{type:mongoose.Schema.Types.ObjectId}],
-  unlike:[{type:mongoose.Schema.Types.ObjectId}]
+  dislike:[{type:mongoose.Schema.Types.ObjectId}]
 
   // postList:[mongoose.Schema.Types.ObjectId, refPath="postType"],
   // postType:{type:String, enum:[Question, Answer, Comment]}
