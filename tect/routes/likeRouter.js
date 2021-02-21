@@ -28,12 +28,12 @@ router.put('/question/:id',async(req,res)=>{
             if(question.like_user.includes(id)==false){
                 console.log("qwe")
                 Question.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
-                Question.findOneAndUpdate({_id:id},{like_user:id}).exec();
+                Question.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
             }
             else{
                 Question.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                Question.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
+                Question.findOneAndUpdate({_id:id},{$pull:{like_user:MONOGO_UID}}).exec();
             }
             callback(null);
         }],
@@ -57,12 +57,12 @@ router.put('/answer/:id',async(req,res)=>{
             if(answer.like_user.includes(id)==false){
                 console.log("qwe")
                 Answer.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
-                Answer.findOneAndUpdate({_id:id},{like_user:id}).exec();
+                Answer.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
             }
             else{
                 Answer.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                Answer.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
+                Answer.findOneAndUpdate({_id:id},{$pull:{like_user:MONOGO_UID}}).exec();
             }
             callback(null);
         }],
@@ -86,12 +86,12 @@ router.put('/questioncomments/:id',async(req,res)=>{
             if(questioncomments.like_user.includes(id)==false){
                 console.log("qwe")
                 QuestionComment.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
-                QuestionComment.findOneAndUpdate({_id:id},{like_user:id}).exec();
+                QuestionComment.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
             }
             else{
                 QuestionComment.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                QuestionComment.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
+                QuestionComment.findOneAndUpdate({_id:id},{$pull:{like_user:MONOGO_UID}}).exec();
             }
             callback(null);
         }],
@@ -115,12 +115,12 @@ router.put('/answercomments/:id',async(req,res)=>{
             if(answercomments.like_user.includes(id)==false){
                 console.log("qwe")
                 AnswerComment.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
-                AnswerComment.findOneAndUpdate({_id:id},{like_user:id}).exec();
+                AnswerComment.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
             }
             else{
                 AnswerComment.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                AnswerComment.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
+                AnswerComment.findOneAndUpdate({_id:id},{$pull:{like_user:MONOGO_UID}}).exec();
             }
             callback(null);
         }],
@@ -144,12 +144,12 @@ router.put('/techtree/:id',async(req,res)=>{
             if(techtree.like_user.includes(id)==false){
                 console.log("qwe")
                 TechTree.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
-                TechTree.findOneAndUpdate({_id:id},{like_user:id}).exec();
+                TechTree.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
             }
             else{
                 TechTree.findOneAndUpdate({_id:id},{$inc:{like:-1}}).exec();
-                TechTree.findOneAndUpdate({_id:id},{$pull:{like_user:id}}).exec();
+                TechTree.findOneAndUpdate({_id:id},{$pull:{like_user:MONOGO_UID}}).exec();
             }
             callback(null);
         }],
