@@ -27,9 +27,6 @@ router.put('/question/:id',async(req,res)=>{
         function(callback){
             if(question.like_user.includes(id)==false){
                 console.log("qwe")
-                console.log(MONGO_UID);
-                console.log(MONGO_USER);
-                console.log(MONGO_USER[0]._id);
                 Question.findOneAndUpdate({_id:id},{$inc:{like:1}}).exec();
                 Question.findOneAndUpdate({_id:id},{like_user:MONOGO_UID}).exec();
                 // User.findOneAndUpdate({_id:MONGO_UID},{like:id}).exec();
