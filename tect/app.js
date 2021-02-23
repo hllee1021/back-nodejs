@@ -25,7 +25,7 @@ const likeRouter=require('./routes/likeRouter');
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
 // CONNECT TO MONGODB SERVER //process.env.MONGO_URI
-mongoose.connect(`mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PASSWORD}@subjects.3o4wh.mongodb.net/tect_develop_DB?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true  })
+mongoose.connect(`mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PASSWORD}@subjects.3o4wh.mongodb.net/tect_develop_DB?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true ,useFindAndModify: false})
   .then(() => console.log('mongodb 연결 완료'))
   .catch(e => console.error(e));
 mongoose.set('useCreateIndex', true)
