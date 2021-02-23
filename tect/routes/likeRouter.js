@@ -17,12 +17,12 @@ const {VERIFY_USER, FIND_MONGO_USER_BY_UID} =require('../firebase/tokenAuth');
 router.put('/question/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res);
-    console.log('1');
-    console.log(FIREBASE_USER);
-    MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    console.log('1');
-    console.log(MONGO_USER);
-    MONGO_UID = mongoose.Types.ObjectId(MONGO_USER[0]._id);
+    // console.log('1');
+    // console.log(FIREBASE_USER);
+    // MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
+    // console.log('1');
+    // console.log(MONGO_USER);
+    MONGO_UID = mongoose.Types.ObjectId(FIREBASE_USER.uid);
 
     // var user=id;
     const question=await Question.findOne({_id:id}).exec();
