@@ -18,7 +18,7 @@ router.put('/question/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res);
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    MONGO_UID = mongoose.Types.ObjectId(MONGO_USER[0]._id);
+    MONGO_UID =MONGO_USER[0].firebaseUid;
     const question=await Question.findOne({_id:id}).exec();
     async.waterfall([
         function(callback){
@@ -44,7 +44,7 @@ router.put('/answer/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    MONGO_UID = MONGO_USER[0]._id
+    MONGO_UID = MONGO_USER[0].firebaseUid
     const answer=await Answer.findOne({_id:id}).exec();
     async.waterfall([
         function(callback){
@@ -69,7 +69,7 @@ router.put('/questioncomments/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    MONGO_UID = MONGO_USER[0]._id
+    MONGO_UID = MONGO_USER[0].firebaseUid
     const questioncomments=await QuestionComment.findOne({_id:id}).exec();
     async.waterfall([
         function(callback){
@@ -95,7 +95,7 @@ router.put('/answercomments/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    MONGO_UID = MONGO_USER[0]._id
+    MONGO_UID = MONGO_USER[0].firebaseUid
     const answercomments=await AnswerComment.findOne({_id:id}).exec();
     async.waterfall([
         function(callback){
@@ -120,7 +120,7 @@ router.put('/techtree/:id',async(req,res)=>{
     const id=req.params.id;
     FIREBASE_USER= await VERIFY_USER(req,res)
     MONGO_USER = await FIND_MONGO_USER_BY_UID(FIREBASE_USER.uid)
-    MONGO_UID = MONGO_USER[0]._id
+    MONGO_UID = MONGO_USER[0].firebaseUid
     const techtree=await TechTree.findOne({_id:id}).exec();
     async.waterfall([
         function(callback){

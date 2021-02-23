@@ -15,7 +15,7 @@ const techTreeSchema = new Schema({
         type:String
     },
     like:{type:Number, default:0},
-    like_user:[{type:mongoose.Schema.Types.ObjectId}],
+    like_user:[String],
     thumbnail:{type:String}
 
 }, {
