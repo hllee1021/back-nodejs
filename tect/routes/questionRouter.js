@@ -171,15 +171,5 @@ router.delete('/:postID', (req, res) => {
 })
 
 
-//좋아요
-//좋아요 누른 userId question 모델에 저장 || 좋아요 누른 postID user 모델에 저장
-router.put('/:questionID/like', async (req, res)=>{
-  
-  if (user.posts.like == false) {
-    
-    await Question.updateOne({_id:req.params.questionID},{$set : {'like': like +1 }})
-  }
-  
-})
 
 module.exports = router;
