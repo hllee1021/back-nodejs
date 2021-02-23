@@ -18,7 +18,7 @@ const questionCommentSchema = new Schema({
     dislike:{type:Number, default:0},
     selected:{type:Boolean, default:false},
     deleted:{type:Boolean, default:false},
-    like_user:[{type:mongoose.Schema.Types.ObjectId}],
+    like_user:[String],
     author:{type:mongoose.Schema.Types.ObjectId, ref:'User'}
 }, {
     timestamps:true
