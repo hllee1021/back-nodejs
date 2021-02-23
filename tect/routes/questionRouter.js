@@ -106,7 +106,62 @@ router.get('/page/:page', async (req, res) => {
   res.send({questionSum: questionSum, question : questions})
 })
 
-
+//추천순 읽어오기
+router.get('/likepage/:page', async (req, res) => {
+  var page = req.params.page
+  var offset = (page-1)*10
+  var questions = await Question.aggregate([
+    { $match: { _id: { $exists: true } } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'posts',
+        as: 'author'
+      }
+    },
+    {
+      $lookup: {
+        from: 'answers',
+        localField: '_id',
+        foreignField: 'questionID',
+        as: 'answerList'
+      }
+    },
+    {
+      $lookup: {
+        from: 'questionComments',
+        localField: '_id',
+        foreignField: 'questionID',
+        as: 'commentList'
+      }
+    },
+    {
+      $project:{
+        "author.displayName":1,
+        "author.points":1,
+        type:1,
+        hashtags:1,
+        like:1,
+        unlike:1,
+        title:1,
+        contentSubstring:{$substrCP:["$content", 0, 100]},
+        createdAt:1,
+        updatedAt:1,
+        commentSum:{$size:"$commentList"},
+        answerSum:{$size:"$answerList"},
+        // questionSum:{$size:"$question"}
+      }
+    }
+  ])
+  .sort({like : -1})
+  .skip(offset)
+  .limit(10)
+  .exec()
+  
+  var questionSum = await Question.find().countDocuments()
+  res.send({questionSum: questionSum, question : questions})
+})
 // questionID 이용해서 읽어오기
 router.get('/:questionID', async (req, res) => {
   var question, questionComments = {}
