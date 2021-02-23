@@ -13,7 +13,7 @@ const questionSchema = new Schema({
     like:{type:Number, default:0},
     dislike:{type:Number, default:0},
     // like_user:[{type:mongoose.Schema.Types.ObjectId}],
-    like_user:{type:String},
+    like_user:[String],
     //V.2021 01 27
     author:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
 
