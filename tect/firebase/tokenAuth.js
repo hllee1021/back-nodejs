@@ -76,7 +76,7 @@ const VERIFY_USER = async(req, res)=>{
 const FIND_MONGO_USER_BY_UID = async(frontFirebaseUid) =>{
     //aggregate project 이용해서 uid 제외하고 보여주기?
     
-    mongoUser = await User.find({firebaseUid:frontFirebaseUid}).exec();
+    mongoUser = await User.findOne({firebaseUid:frontFirebaseUid}).exec();
     return mongoUser
 }
 
